@@ -29,7 +29,7 @@ model fornalha2
     Real cp_ref(unit="kJ/(kg.K)")      "Calor específico do ar ambiente";
 
     input Real T_ar_out(unit="degC") "Temperatura do ar pré-aquecido";
-    input Real T_g(unit="degC")      "Temperatura de saída dos gases da fornalha";
+    output Real T_g(unit="degC", start=1000) "Temperatura de saída dos gases da fornalha";
 
     output Real h_ar_out(unit="kJ/kg", start=10) "Entalpia do ar pré-aquecido";
     output Real h_g(unit="kJ/kg", start=10) "Entalpia dos gases de saída da fornalha";
