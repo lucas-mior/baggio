@@ -8,7 +8,7 @@ model fornalha2
             parameter Real C = 8.94269e-8;
             parameter Real D = -3.63247e-11;
         algorithm
-            c := A + B * T + C * T ^ 2 + D * T ^ 3;
+            c := A + B*T + C*T^2 + D*T^3;
     end calor_especifico;
 
     constant Real m_fuel(unit="kg/s") = 0.7942 "Fluxo de energia do combustível";
