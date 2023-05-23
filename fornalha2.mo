@@ -25,10 +25,10 @@ model fornalha2
 
     input Real cp_ar_out(unit="kJ/(kg.K)", start=1) "Calor específico do ar pré-aquecido";
     input Real cp_g(unit="kJ/(kg.K)", start=1)      "Calor específico dos gases de saída da fornalha";
-    Real cp_ad(unit="kJ/(kg.K)")     "Calor específico dos gases para temperatura adiabática";
-    Real cp_ref(unit="kJ/(kg.K)")      "Calor específico do ar ambiente";
+    Real cp_ad(unit="kJ/(kg.K)", start=1)     "Calor específico dos gases para temperatura adiabática";
+    Real cp_ref(unit="kJ/(kg.K)", start=1)      "Calor específico do ar ambiente";
 
-    input Real T_ar_out(unit="degC", start=100) "Temperatura do ar pré-aquecido";
+    input Real T_ar_out(unit="degC") "Temperatura do ar pré-aquecido";
     output Real T_g(unit="degC", start=1000) "Temperatura de saída dos gases da fornalha";
 
     output Real h_ar_out(unit="kJ/kg", start=10) "Entalpia do ar pré-aquecido";
@@ -42,7 +42,13 @@ model fornalha2
 
     Real T_for(unit="degC", start=1000) "Temperatura média dos gases na fornalha";
     Real T_ad(unit="degC", start=200)   "Temperatura adiabática da chama";
+    
+    outer input Modelica.Blocks.Interfaces.RealInput u annotation(
+    Placement(visible = true, transformation(origin = {-108, 50}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-42, 20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    outer output Modelica.Blocks.Interfaces.RealOutput y annotation(
+    Placement(visible = true, transformation(origin = {108, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {108, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
+    T_ar_out = u;
     m_g = m_fuel + m_ar;
     q_fuel = m_fuel * PCI;
     
@@ -61,4 +67,7 @@ equation
 
     T_ad = (q_fuel + q_ar_out) / (m_g * cp_ad * 10);
     T_for = (T_g + T_ad) / 2;
+    y = T_g;
+annotation(
+    uses(Modelica(version = "4.0.0")));
 end fornalha2;
