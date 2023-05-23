@@ -25,7 +25,7 @@ model fornalha2
 
     input Real cp_ar_out(unit="kJ/(kg.K)", start=1) "Calor específico do ar pré-aquecido";
     input Real cp_g(unit="kJ/(kg.K)", start=1)      "Calor específico dos gases de saída da fornalha";
-    input Real cp_ad(unit="kJ/(kg.K)", start=1)     "Calor específico dos gases para temperatura adiabática";
+    Real cp_ad(unit="kJ/(kg.K)")     "Calor específico dos gases para temperatura adiabática";
     Real cp_ref(unit="kJ/(kg.K)")      "Calor específico do ar ambiente";
 
     input Real T_ar_out(unit="degC") "Temperatura do ar pré-aquecido";
@@ -40,12 +40,13 @@ model fornalha2
     constant Real T_ref(unit="degC")   = 25  "Temperatura ambiente";
     constant Real T_metal(unit="degC") = 228 "Temperatura média dos tubos de metal na fornalha";
 
-    output Real T_for(unit="degC", start=1000) "Temperatura média dos gases na fornalha";
-    output Real T_ad(unit="degC", start=200)   "Temperatura adiabática da chama";
+    Real T_for(unit="degC", start=1000) "Temperatura média dos gases na fornalha";
+    Real T_ad(unit="degC", start=200)   "Temperatura adiabática da chama";
 equation
     m_g = m_fuel + m_ar;
     q_fuel = m_fuel * PCI;
     
+    cp_ad = calor_especifico(T_ad);
     cp_ref = calor_especifico(T_ref);
     
     h_ar_out = cp_ar_out * T_ar_out - cp_ref * T_metal;
