@@ -2,10 +2,16 @@ model completo
   Modelica.Blocks.Sources.Constant const(k = 10)  annotation(
     Placement(visible = true, transformation(origin = {-62, -2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   fornalha fornalha1 annotation(
-    Placement(visible = true, transformation(origin = {32, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-2, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  screen screen1 annotation(
+    Placement(visible = true, transformation(origin = {56, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(const.y, fornalha1.T_ar_out) annotation(
-    Line(points = {{-50, -2}, {28, -2}, {28, 2}}, color = {0, 0, 127}));
+    Line(points = {{-50, -2}, {-6, -2}, {-6, 2}}, color = {0, 0, 127}));
+  connect(fornalha1.q_g, screen1.q_g) annotation(
+    Line(points = {{6, -4}, {44, -4}}, color = {0, 0, 127}));
+  connect(fornalha1.T_g, screen1.T_g) annotation(
+    Line(points = {{2, 0}, {48, 0}, {48, 6}}, color = {0, 0, 127}));
   annotation(
     uses(Modelica(version = "4.0.0")));
 end completo;

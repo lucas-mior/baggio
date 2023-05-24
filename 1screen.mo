@@ -12,8 +12,10 @@ model screen
     end calor_especifico;
 
     constant Real m_g(unit = "kg/s") = 0.7942 "Fluxo mássico dos gases";
-    input Real q_g(unit = "W", start = 100)    "Fluxo de energia de entrada dos gases do screen";
-    input Real T_g(unit = "K", start = 100)    "Temperatura de entrada dos gases do screen";
+    Modelica.Blocks.Interfaces.RealInput T_g(unit = "K", start = 100) "Temperatura de entrada dos gases do screen"  annotation(
+    Placement(visible = true, transformation(origin = {-143, 59}, extent = {{-43, -43}, {43, 43}}, rotation = 0), iconTransformation(origin = {-76, 52}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Modelica.Blocks.Interfaces.RealInput q_g(unit = "W", start = 100) "Fluxo de energia de entrada dos gases do screen" annotation(
+    Placement(visible = true, transformation(origin = {-99, -45}, extent = {{-45, -45}, {45, 45}}, rotation = 0), iconTransformation(origin = {-128, -40}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 
     output Real q_ev(unit = "W", start = 1)           "Fluxo de energia de saída do screen";
     output Real q_rad_ev(unit = "W", start = 1)       "Fluxo de energia transferido por radiação no screen";
@@ -44,4 +46,6 @@ equation
     q_ev = (m_g*h_ev)/10;
 
     T_ev_med = (T_g + T_ev)/2;
+annotation(
+    uses(Modelica(version = "4.0.0")));
 end screen;
