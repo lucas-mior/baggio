@@ -11,31 +11,51 @@ model screen
         c := A + B*T + C*T^2 + D*T^3;
     end calor_especifico;
 
-    Modelica.Blocks.Interfaces.RealInput m_g(unit = "kg/s", start = 100) "Fluxo mássico dos gases" 
-    annotation(
-    Placement(visible = true, transformation(origin = {-98, 68}, extent = {{-42, -42}, {42, 42}}, rotation = 0), iconTransformation(origin = {-88, 58}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-    Modelica.Blocks.Interfaces.RealInput T_g(unit = "degC", start = 100) "Temperatura de entrada dos gases do screen"               
-    annotation(
-    Placement(visible = true, transformation(origin = {-99, -3}, extent = {{-43, -43}, {43, 43}}, rotation = 0), iconTransformation(origin = {-69, 49}, extent = {{-31, -31}, {31, 31}}, rotation = 0)));
-    Modelica.Blocks.Interfaces.RealInput q_g(unit = "W", start = 100) "Fluxo de energia de entrada dos gases do screen" 
-    annotation(
-    Placement(visible = true, transformation(origin = {-99, -73}, extent = {{-45, -45}, {45, 45}}, rotation = 0), iconTransformation(origin = {-71, -49}, extent = {{-29, -29}, {29, 29}}, rotation = 0)));
+    Modelica.Blocks.Interfaces.RealInput m_g(unit = "kg/s", start = 100)
+    "Fluxo mássico dos gases"
+    annotation( Placement(visible = true, transformation(origin = {-98, 68},
+    extent = {{-42, -42}, {42, 42}}, rotation = 0), iconTransformation(origin =
+    {-88, 58}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+
+    Modelica.Blocks.Interfaces.RealInput T_g(unit = "degC", start = 100)
+    "Temperatura de entrada dos gases do screen"
+    annotation( Placement(visible = true, transformation(origin = {-99, -3},
+    extent = {{-43, -43}, {43, 43}}, rotation = 0), iconTransformation(origin =
+    {-69, 49}, extent = {{-31, -31}, {31, 31}}, rotation = 0)));
+
+    Modelica.Blocks.Interfaces.RealInput q_g(unit = "W", start = 100)
+    "Fluxo de energia de entrada dos gases do screen"
+    annotation( Placement(visible = true, transformation(origin = {-99, -73},
+    extent = {{-45, -45}, {45, 45}}, rotation = 0), iconTransformation(origin =
+    {-71, -49}, extent = {{-29, -29}, {29, 29}}, rotation = 0)));
 
     output Real q_ev(unit = "W", start = 1)
     "Fluxo de energia de saída do screen";
-    output Real q_rad_ev(unit = "W", start = 1)       "Fluxo de energia transferido por radiação no screen";
-    output Real q_conv_ev(unit = "W", start = 1)      "Fluxo de energia transferido por convecção no screen";
-    output Real h_ev(unit = "kJ/kg", start = 1)       "Entalpia dos gases na saída do screen";
-    output Real cp_ev(unit = "kJ/(kg.K)", start = 1)  "Calor específico dos gases na saída do screen";
-    output Real cp_ref(unit = "kJ/(kg.K)", start = 1) "Calor específico do ar na temperatura ambiente";
-    output Real cp_g(unit = "kJ/(kg.K)", start = 1)   "Calor específico de entrada dos gases do screen";
-    output Real T_ev(unit = "degC", displayUnit="degC", start = 100)         "Temperatura de saída dos gases do screen";
-    output Real T_ev_med(unit = "degC", start = 100)     "Temperatura média dos gases no screen";
+    output Real q_rad_ev(unit = "W", start = 1)
+    "Fluxo de energia transferido por radiação no screen";
+    output Real q_conv_ev(unit = "W", start = 1)
+    "Fluxo de energia transferido por convecção no screen";
+    output Real h_ev(unit = "kJ/kg", start = 1)
+    "Entalpia dos gases na saída do screen";
+    output Real cp_ev(unit = "kJ/(kg.K)", start = 1)
+    "Calor específico dos gases na saída do screen";
+    output Real cp_ref(unit = "kJ/(kg.K)", start = 1)
+    "Calor específico do ar na temperatura ambiente";
+    output Real cp_g(unit = "kJ/(kg.K)", start = 1)
+    "Calor específico de entrada dos gases do screen";
+    output Real T_ev(unit = "degC", displayUnit="degC", start = 100)
+    "Temperatura de saída dos gases do screen";
+    output Real T_ev_med(unit = "degC", start = 100)
+    "Temperatura média dos gases no screen";
 
-    constant Real T_ref(unit = "degC") = 25                 "Temperatura ambiente";
-    constant Real T_metal(unit = "degC") = 228              "Temperatura média dos tubos de metal no screen";
-    constant Real alpha_rad_ev(unit = "kW/K4") = 7.8998e-11 "Constante de transferência de calor por radiação do screen";
-    constant Real alpha_conv_ev(unit = "kW/K") = 0.8865     "Constante de transferência de calor por convecção do screen";
+    constant Real T_ref(unit = "degC") = 25
+    "Temperatura ambiente";
+    constant Real T_metal(unit = "degC") = 228
+    "Temperatura média dos tubos de metal no screen";
+    constant Real alpha_rad_ev(unit = "kW/K4") = 7.8998e-11
+    "Constante de transferência de calor por radiação do screen";
+    constant Real alpha_conv_ev(unit = "kW/K") = 0.8865
+    "Constante de transferência de calor por convecção do screen";
 equation
     q_g - q_ev - q_rad_ev - q_conv_ev = 0;
 
