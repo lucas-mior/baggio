@@ -15,7 +15,7 @@ model fornalha
     Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-82, -82}, {82, 82}}, rotation = 0), iconTransformation(origin = {-66, 0}, extent = {{-34, -34}, {34, 34}}, rotation = 0)));
 
     constant Real m_fuel(unit = "kg/s") = 0.7942 "Fluxo de energia do combustível";
-    constant Real m_ar(unit = "kg/s") = 3.7008;
+    constant Real m_ar_out(unit = "kg/s") = 3.7008;
     constant Real alpha_rad_f(unit = "kW/(K4)") = 3.5721e-10 "Constante de transferência de calor por radiação na fornalha";
     constant Real alpha_conv_f(unit = "kW/K") = 0.3758 "Constante de transferência de calor por convecção na fornalha";
     constant Real T_ref(unit = "degC") = 25 "Temperatura ambiente";
@@ -43,7 +43,7 @@ model fornalha
 
 equation
     q_fuel + q_ar_out - q_g - q_rad_f - q_conv_f = 0;
-    m_g = m_fuel + m_ar;
+    m_g = m_fuel + m_ar_out;
     q_fuel = m_fuel*PCI;
 
     cp_ad = calor_especifico(T_ad);
@@ -52,7 +52,7 @@ equation
     cp_ar_out = calor_especifico(T_ar_out);
 
     h_ar_out = cp_ar_out*T_ar_out - cp_ref*T_ref;
-    q_ar_out = m_ar*h_ar_out;
+    q_ar_out = m_ar_out*h_ar_out;
 
     q_rad_f = alpha_rad_f*(T_for^4 - T_metal^4);
     q_conv_f = alpha_conv_f*(T_for - T_metal);
