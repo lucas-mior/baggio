@@ -1,0 +1,47 @@
+model screen
+    function calor_especifico
+        input Real T(unit = "degC") "Temperatura";
+        output Real c "Calor específico";
+    protected
+        parameter Real A = 1.00269;
+        parameter Real B = 3.4628e-5;
+        parameter Real C = 8.94269e-8;
+        parameter Real D = -3.63247e-11;
+    algorithm
+        c := A + B*T + C*T^2 + D*T^3;
+    end calor_especifico;
+
+    constant Real m_g(unit = "kg/s") = 0.7942 "Fluxo mássico dos gases";
+    input Real q_g(unit = "W", start = 100)    "Fluxo de energia de entrada dos gases do screen";
+    input Real T_g(unit = "K", start = 100)    "Temperatura de entrada dos gases do screen";
+
+    output Real q_ev(unit = "W", start = 1)           "Fluxo de energia de saída do screen";
+    output Real q_rad_ev(unit = "W", start = 1)       "Fluxo de energia transferido por radiação no screen";
+    output Real q_conv_ev(unit = "W", start = 1)      "Fluxo de energia transferido por convecção no screen";
+    output Real h_ev(unit = "kJ/kg", start = 1)       "Entalpia dos gases na saída do screen";
+    output Real cp_ev(unit = "kJ/(kg.K)", start = 1)  "Calor específico dos gases na saída do screen";
+    output Real cp_ref(unit = "kJ/(kg.K)", start = 1) "Calor específico do ar na temperatura ambiente";
+    output Real cp_g(unit = "kJ/(kg.K)", start = 1)   "Calor específico de entrada dos gases do screen";
+    output Real T_ev(unit = "K", start = 100)         "Temperatura de saída dos gases do screen";
+    output Real T_ev_med(unit = "K", start = 100)     "Temperatura média dos gases no screen";
+
+    constant Real T_ref(unit = "K") = 25                    "Temperatura ambiente";
+    constant Real T_metal(unit = "K") = 228                 "Temperatura média dos tubos de metal no screen";
+    constant Real alpha_rad_ev(unit = "kW/K4") = 7.8998e-11 "Constante de transferência de calor por radiação do screen";
+    constant Real alpha_conv_ev(unit = "kW/K") = 0.8865     "Constante de transferência de calor por convecção do screen";
+
+equation
+    q_g - q_ev - q_rad_ev - q_conv_ev = 0;
+
+    cp_g = calor_especifico(T_g);
+    cp_ref = calor_especifico(T_ref);
+    cp_ev = calor_especifico(T_ev);
+
+    q_rad_ev = alpha_rad_ev * (T_ev_med^4 - T_metal^4);
+    q_conv_ev = alpha_conv_ev * (T_ev_med - T_metal);
+
+    h_ev = m_g*(cp_ev*T_ev - cp_ref*T_ref);
+    q_ev = (m_g*h_ev)/10;
+
+    T_ev_med = (T_g + T_ev)/2;
+end screen;

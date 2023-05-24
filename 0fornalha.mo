@@ -1,4 +1,4 @@
-model fornalha2
+model fornalha
   function calor_especifico
     input Real T(unit = "degC") "Temperatura";
     output Real c "Calor específico";
@@ -24,20 +24,18 @@ model fornalha2
   Real cp_g(unit = "kJ/(kg.K)", start = 1) "Calor específico dos gases de saída da fornalha";
   Real cp_ad(unit = "kJ/(kg.K)", start = 1) "Calor específico dos gases para temperatura adiabática";
   Real cp_ref(unit = "kJ/(kg.K)", start = 1) "Calor específico do ar ambiente";
-  Real T_ar_out(unit = "degC", start = 100) "Temperatura do ar pré-aquecido";
   output Real T_g(unit = "degC", start = 1000) "Temperatura de saída dos gases da fornalha";
   output Real h_ar_out(unit = "kJ/kg", start = 10) "Entalpia do ar pré-aquecido";
   output Real h_g(unit = "kJ/kg", start = 10) "Entalpia dos gases de saída da fornalha";
-  constant Real alpha_rad_f(unit = "kW/(K.K.K.K)") = 3.5721e-10 "Constante de transferência de calor por radiação na fornalha";
+  constant Real alpha_rad_f(unit = "kW/(K4)") = 3.5721e-10 "Constante de transferência de calor por radiação na fornalha";
   constant Real alpha_conv_f(unit = "kW/K") = 0.3758 "Constante de transferência de calor por convecção na fornalha";
   constant Real T_ref(unit = "degC") = 25 "Temperatura ambiente";
   constant Real T_metal(unit = "degC") = 228 "Temperatura média dos tubos de metal na fornalha";
   Real T_for(unit = "degC", start = 1000) "Temperatura média dos gases na fornalha";
   Real T_ad(unit = "degC", start = 200) "Temperatura adiabática da chama";
-  Modelica.Blocks.Interfaces.RealInput u annotation(
+  Modelica.Blocks.Interfaces.RealInput T_ar_out(unit = "degC", start = 100) annotation(
     Placement(visible = true, transformation(origin = {-150, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-42, 20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 equation
-  T_ar_out = u;
   m_g = m_fuel + m_ar;
   q_fuel = m_fuel*PCI;
   
@@ -46,7 +44,7 @@ equation
   cp_g = calor_especifico(T_g);
   cp_ar_out = calor_especifico(T_ar_out);
   
-  h_ar_out = cp_ar_out*T_ar_out - cp_ref*T_metal;
+  h_ar_out = cp_ar_out*T_ar_out - cp_ref*T_ref;
   q_ar_out = m_ar*h_ar_out;
   q_rad_f = alpha_rad_f*(T_for^4 - T_metal^4);
   q_conv_f = alpha_conv_f*(T_for - T_metal);
@@ -57,4 +55,4 @@ equation
   T_for = (T_g + T_ad)/2;
   annotation(
     uses(Modelica(version = "4.0.0")));
-end fornalha2;
+end fornalha;
