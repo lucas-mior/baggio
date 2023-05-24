@@ -24,9 +24,9 @@ model fornalha
   Real cp_ad(unit = "kJ/(kg.K)", start = 1) "Calor específico dos gases para temperatura adiabática";
   Real cp_ref(unit = "kJ/(kg.K)", start = 1) "Calor específico do ar ambiente";
   Modelica.Blocks.Interfaces.RealOutput T_g(unit = "degC", start = 1000) "Temperatura de saída dos gases da fornalha" annotation(
-  Placement(visible = true, transformation(origin = {142, 72}, extent = {{-70, -70}, {70, 70}}, rotation = 0), iconTransformation(origin = {36, -4}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Placement(visible = true, transformation(origin = {142, 72}, extent = {{-70, -70}, {70, 70}}, rotation = 0), iconTransformation(origin = {70, 70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput q_g(unit = "W", start = 500) "Fluxo de energia de saída dos gases da fornalha" annotation(
-  Placement(visible = true, transformation(origin = {128, -66}, extent = {{-60, -60}, {60, 60}}, rotation = 0), iconTransformation(origin = {84, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Placement(visible = true, transformation(origin = {128, -66}, extent = {{-60, -60}, {60, 60}}, rotation = 0), iconTransformation(origin = {70, -70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
   output Real h_ar_out(unit = "kJ/kg", start = 10) "Entalpia do ar pré-aquecido";
   output Real h_g(unit = "kJ/kg", start = 10) "Entalpia dos gases de saída da fornalha";
   constant Real alpha_rad_f(unit = "kW/(K4)") = 3.5721e-10 "Constante de transferência de calor por radiação na fornalha";
@@ -36,7 +36,7 @@ model fornalha
   Real T_for(unit = "degC", start = 1000) "Temperatura média dos gases na fornalha";
   Real T_ad(unit = "degC", start = 200) "Temperatura adiabática da chama";
   Modelica.Blocks.Interfaces.RealInput T_ar_out(unit = "degC", start = 100) annotation(
-    Placement(visible = true, transformation(origin = {-98, 6}, extent = {{-82, -82}, {82, 82}}, rotation = 0), iconTransformation(origin = {-42, 20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-98, 6}, extent = {{-82, -82}, {82, 82}}, rotation = 0), iconTransformation(origin = {-66, 0}, extent = {{-34, -34}, {34, 34}}, rotation = 0)));
 
 equation
   m_g = m_fuel + m_ar;

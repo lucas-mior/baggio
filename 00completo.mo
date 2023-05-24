@@ -8,10 +8,10 @@ model completo
 equation
   connect(const.y, fornalha1.T_ar_out) annotation(
     Line(points = {{-50, -2}, {-6, -2}, {-6, 2}}, color = {0, 0, 127}));
-  connect(fornalha1.q_g, screen1.q_g) annotation(
-    Line(points = {{6, -4}, {44, -4}}, color = {0, 0, 127}));
   connect(fornalha1.T_g, screen1.T_g) annotation(
-    Line(points = {{2, 0}, {48, 0}, {48, 6}}, color = {0, 0, 127}));
+    Line(points = {{6, 8}, {50, 8}, {50, 4}}, color = {0, 0, 127}));
+  connect(fornalha1.q_g, screen1.q_g) annotation(
+    Line(points = {{4, -6}, {26, -6}, {26, -4}, {48, -4}}, color = {0, 0, 127}));
   annotation(
     uses(Modelica(version = "4.0.0")));
 end completo;
