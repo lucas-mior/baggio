@@ -13,7 +13,7 @@ model screen
 
     constant Real m_g(unit = "kg/s") = 0.7942 "Fluxo mássico dos gases";
     Modelica.Blocks.Interfaces.RealInput T_g(unit = "degC", start = 100) "Temperatura de entrada dos gases do screen"  annotation(
-    Placement(visible = true, transformation(origin = {-143, 59}, extent = {{-43, -43}, {43, 43}}, rotation = 0), iconTransformation(origin = {-69, 49}, extent = {{-31, -31}, {31, 31}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-99, 59}, extent = {{-43, -43}, {43, 43}}, rotation = 0), iconTransformation(origin = {-69, 49}, extent = {{-31, -31}, {31, 31}}, rotation = 0)));
     Modelica.Blocks.Interfaces.RealInput q_g(unit = "W", start = 100) "Fluxo de energia de entrada dos gases do screen" annotation(
     Placement(visible = true, transformation(origin = {-99, -45}, extent = {{-45, -45}, {45, 45}}, rotation = 0), iconTransformation(origin = {-71, -49}, extent = {{-29, -29}, {29, 29}}, rotation = 0)));
 
