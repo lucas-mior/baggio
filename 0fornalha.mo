@@ -11,15 +11,8 @@ model fornalha
         c := A + B*T + C*T^2 + D*T^3;
     end calor_especifico;
 
-    Modelica.Blocks.Interfaces.RealInput T_ar_out(unit = "degC", start = 100)
-    "Temperatura do ar pré-aquecido"
-    annotation(Placement(visible = true, transformation(origin = {-100, 0},
-    extent = {{-82, -82}, {82, 82}}, rotation = 0), iconTransformation(origin =
-    {-66, 0}, extent = {{-34, -34}, {34, 34}}, rotation = 0)));
-
     constant Real m_fuel(unit = "kg/s") = 0.7942
-    "Fluxo de energia do combustível";
-
+    "Fluxo mássico de combustível";
     constant Real m_ar_out(unit = "kg/s") = 3.7008
     "Fluxo mássico de ar pré-aquecido";
     constant Real alpha_rad_f(unit = "kW/(K4)") = 3.5721e-10
@@ -59,21 +52,18 @@ model fornalha
     output Real h_g(unit = "kJ/kg", start = 10)
     "Entalpia dos gases de saída da fornalha";
 
+    Modelica.Blocks.Interfaces.RealInput T_ar_out(unit = "degC", start = 100)
+    "Temperatura do ar pré-aquecido"
+    annotation(Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-82, -82}, {82, 82}}, rotation = 0), iconTransformation(origin = {-66, 0}, extent = {{-34, -34}, {34, 34}}, rotation = 0)));
     Modelica.Blocks.Interfaces.RealOutput T_g(unit = "degC", start = 1000)
     "Temperatura de saída dos gases da fornalha"
-    annotation(Placement(visible = true, transformation(origin = {100, 64},
-    extent = {{-70, -70}, {70, 70}}, rotation = 0), iconTransformation(origin =
-    {70, 70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
+    annotation(Placement(visible = true, transformation(origin = {100, 64}, extent = {{-70, -70}, {70, 70}}, rotation = 0), iconTransformation(origin = {70, 70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
     Modelica.Blocks.Interfaces.RealOutput q_g(unit = "W", start = 500)
     "Fluxo de energia de saída dos gases da fornalha" 
-    annotation(Placement(visible = true, transformation(origin = {97, -67},
-    extent = {{-65, -65}, {65, 65}}, rotation = 0), iconTransformation(origin =
-    {70, -70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
+    annotation(Placement(visible = true, transformation(origin = {97, -67}, extent = {{-65, -65}, {65, 65}}, rotation = 0), iconTransformation(origin = {70, -70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
     output Modelica.Blocks.Interfaces.RealOutput m_g(unit = "kg/s", start = 4.495)
     "Fluxo mássico dos gases"
-    annotation( Placement(visible = true, transformation(origin = {0, 0}, extent
-    = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70,
-    0}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
+    annotation( Placement(visible = true, transformation(origin = {0, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, 0}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
 equation
     q_fuel + q_ar_out - q_g - q_rad_f - q_conv_f = 0;
     m_g = m_fuel + m_ar_out;
