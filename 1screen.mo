@@ -15,19 +15,19 @@ model screen
     "Fluxo mássico dos gases"
     annotation( Placement(visible = true, transformation(origin = {-98, 68},
     extent = {{-42, -42}, {42, 42}}, rotation = 0), iconTransformation(origin =
-    {-88, 58}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    {-71, 3}, extent = {{-29, -29}, {29, 29}}, rotation = 0)));
 
     Modelica.Blocks.Interfaces.RealInput T_g(unit = "degC", start = 100)
     "Temperatura de entrada dos gases do screen"
     annotation( Placement(visible = true, transformation(origin = {-99, -3},
     extent = {{-43, -43}, {43, 43}}, rotation = 0), iconTransformation(origin =
-    {-69, 49}, extent = {{-31, -31}, {31, 31}}, rotation = 0)));
+    {-69, 69}, extent = {{-31, -31}, {31, 31}}, rotation = 0)));
 
     Modelica.Blocks.Interfaces.RealInput q_g(unit = "W", start = 100)
     "Fluxo de energia de entrada dos gases do screen"
     annotation( Placement(visible = true, transformation(origin = {-99, -73},
     extent = {{-45, -45}, {45, 45}}, rotation = 0), iconTransformation(origin =
-    {-71, -49}, extent = {{-29, -29}, {29, 29}}, rotation = 0)));
+    {-68, -66}, extent = {{-32, -32}, {32, 32}}, rotation = 0)));
 
     output Real q_ev(unit = "W", start = 1)
     "Fluxo de energia de saída do screen";
@@ -37,11 +37,9 @@ model screen
     "Fluxo de energia transferido por convecção no screen";
     output Real h_ev(unit = "kJ/kg", start = 1)
     "Entalpia dos gases na saída do screen";
-    output Real cp_ev(unit = "kJ/(kg.K)", start = 1)
+    output Real cp_ev(unit = "kJ/(kg.degC)", start = 1)
     "Calor específico dos gases na saída do screen";
-    output Real cp_ref(unit = "kJ/(kg.K)", start = 1)
-    "Calor específico do ar na temperatura ambiente";
-    output Real cp_g(unit = "kJ/(kg.K)", start = 1)
+    output Real cp_ref(unit = "kJ/(kg.degC)", start = 1)
     "Calor específico de entrada dos gases do screen";
     output Real T_ev(unit = "degC", displayUnit="degC", start = 100)
     "Temperatura de saída dos gases do screen";
@@ -59,14 +57,13 @@ model screen
 equation
     q_g - q_ev - q_rad_ev - q_conv_ev = 0;
 
-    cp_g = calor_especifico(T_g);
     cp_ref = calor_especifico(T_ref);
     cp_ev = calor_especifico(T_ev);
 
     q_rad_ev = alpha_rad_ev * (T_ev_med^4 - T_metal^4);
     q_conv_ev = alpha_conv_ev * (T_ev_med - T_metal);
 
-    h_ev = m_g*(cp_ev*T_ev - cp_ref*T_ref);
+    h_ev = cp_ev*T_ev - cp_ref*T_ref;
     q_ev = (m_g*h_ev)/10;
 
     T_ev_med = (T_g + T_ev)/2;

@@ -37,17 +37,15 @@ model fornalha
     "Temperatura média dos gases na fornalha";
     Real T_ad(unit = "degC", start = 200)
     "Temperatura adiabática da chama";
-    Real cp_ar_out(unit = "kJ/(kg.K)", start = 1)
+    Real cp_ar_out(unit = "kJ/(kg.degC)", start = 1)
     "Calor específico do ar pré-aquecido";
-    Real cp_g(unit = "kJ/(kg.K)", start = 1)
+    Real cp_g(unit = "kJ/(kg.degC)", start = 1)
     "Calor específico dos gases de saída da fornalha";
-    Real cp_ad(unit = "kJ/(kg.K)", start = 1)
+    Real cp_ad(unit = "kJ/(kg.degC)", start = 1)
     "Calor específico dos gases para temperatura adiabática";
-    Real cp_ref(unit = "kJ/(kg.K)", start = 1)
+    Real cp_ref(unit = "kJ/(kg.degC)", start = 1)
     "Calor específico do ar ambiente";
 
-    output Real m_g(unit = "kg/s", start = 4.495)
-    "Fluxo mássico dos gases";
     output Real q_fuel(unit = "W", start = 100)
     "Fluxo de energia do combustível";
     output Real q_ar_out(unit = "W", start = 200)
@@ -71,7 +69,9 @@ model fornalha
     annotation(Placement(visible = true, transformation(origin = {97, -67},
     extent = {{-65, -65}, {65, 65}}, rotation = 0), iconTransformation(origin =
     {70, -70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
-
+    output Modelica.Blocks.Interfaces.RealOutput m_g(unit = "kg/s", start = 4.495)
+    "Fluxo mássico dos gases" annotation(
+    Placement(visible = true, transformation(origin = {0, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, 0}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
 equation
     q_fuel + q_ar_out - q_g - q_rad_f - q_conv_f = 0;
     m_g = m_fuel + m_ar_out;
@@ -93,4 +93,6 @@ equation
 
     T_ad = (q_fuel + q_ar_out)/(m_g*cp_ad*10);
     T_for = (T_g + T_ad)/2;
+annotation(
+    uses(Modelica(version = "4.0.0")));
 end fornalha;
