@@ -63,7 +63,7 @@ model fornalha
     annotation(Placement(visible = true, transformation(origin = {97, -67}, extent = {{-65, -65}, {65, 65}}, rotation = 0), iconTransformation(origin = {70, -70}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
     output Modelica.Blocks.Interfaces.RealOutput m_g(unit="kg/s")
     "Fluxo mássico dos gases"
-    annotation( Placement(visible = true, transformation(origin = {0, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, 0}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
+    annotation( Placement(visible = true, transformation(origin = {97, -1}, extent = {{-63, -63}, {63, 63}}, rotation = 0), iconTransformation(origin = {70, 0}, extent = {{-30, -30}, {30, 30}}, rotation = 0)));
 equation
     q_fuel + q_ar_out - q_g - q_rad_f - q_conv_f = 0;
     m_g = m_fuel + m_ar_out;
