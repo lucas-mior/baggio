@@ -1,49 +1,51 @@
 model pv
     output Real p(unit="bar", start=27);
-    output Real ppascal(unit="Pa",start=2700000);
 
-    output Real rho_v1(unit="kg/m3", start=13.497)
+    Real rho_v1(unit="kg/m3")
     "massa específica do vapor";
-    output Real rho_wt(unit="kg/m3", start=829.830)
+    Real rho_wt(unit="kg/m3")
     "massa específica dá água";
-    output Real h_v1(unit="kJ/kg", start=2800.30)
+    Real h_v1(unit="kJ/kg")
     "entalpia do vapor";
-    output Real h_wt(unit="kJ/kg", start=980.64)
-    "entalpia do água";
+    Real h_wt(unit="kJ/kg")
+    "entalpia da água";
+    Real u_wt(unit="kJ/kg")
+    "energia interna da água";
+    Real u_v1(unit="kJ/kg")
+    "energia interna do vapor";
 
     constant Real h_f(unit="kJ/kg") = 441.841
     "entalpia da água de alimentação";
-
-    output Real u_wt, u_v1;
-    constant Real Q(unit="W") = 45409000;
+    constant Real Q(unit="kW") = 4540.9000
+    "fluxo de calor";
 
     output Real m_f(unit="kg/s", start=1.927)
     "fluxo mássico de água que entra no tubulão";
     constant Real m_v1(unit="kg/s") = 1.927
     "fluxo mássico de água que saí do tubulão";
 
-    input Real V_v1(unit="m3", start=2)
+    Real V_v1(unit="m3", start=2)
     "volume total de vapor no sistema";
-    constant Real V_wt(unit="m3", start=12.4645)
+    Real V_wt(unit="m3") = 12.4645
     "volume total de água no sistema";
-    output Real V_t(unit="m3", start=14.4645)
+    input Real V_t(unit="m3", start=14.4645)
     "volume total";
 
     constant Real m_t(unit="kg") = 12324.333
     "massa total do metal";
     constant Real cp_metal(unit="kJ/(kg.degC)") = 0.550
     "calor específico do metal";
-    output Real t_metal(unit="K", start=228+273)
+    Real t_metal(unit="K")
     "temperatura do metal";
 
-    Real q_v1;
-    Real q_wt;
-    Real q_metal;
-    Real dq;
+    Real q_v1(unit="kJ");
+    Real q_wt(unit="kJ");
+    Real q_metal(unit="kJ");
+    Real dq(unit="kJ");
 
-    Real dm_v1;
-    Real dm_wt;
-    Real dm;
+    Real dm_v1(unit="kg");
+    Real dm_wt(unit="kg");
+    Real dm(unit="kg");
 equation
     V_t = V_v1 + V_wt;
 
@@ -53,14 +55,13 @@ equation
     h_v1    = 2731.845759 + 5.941585*p - 0.169762*p^2 + 0.001615*p^3;
     h_wt    = 578.773728 + 22.682809*p - 0.373929*p^2 + 0.003151*p^3;
 
-    ppascal = p*100000;
-    u_v1 = h_v1 - 1000*(ppascal/rho_v1);
-    u_wt = h_wt - 1000*(ppascal/rho_wt);
+    u_v1 = h_v1 - 1000*(p*100000/rho_v1);
+    u_wt = h_wt - 1000*(p*100000/rho_wt);
 
     dm_v1 = rho_v1*V_v1;
     dm_wt = rho_wt*V_wt;
     dm = dm_v1 + dm_wt;
-    m_f - m_v1 = der(rho_v1*V_v1 + rho_wt*V_wt);
+    m_f - m_v1 = der(dm);
 
     q_v1 = rho_v1*u_v1*V_v1;
     q_wt = rho_wt*u_wt*V_wt;
