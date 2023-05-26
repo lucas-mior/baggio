@@ -1,4 +1,4 @@
-Pressão (bar),pressao,Temperatura(ºC),temperatura,Estado Físico,entalpia,densidade
+pressao,pressao2,Temperatura(ºC),temperatura,Estado Físico,entalpia,densidade
 21,2100000,214.84,487.99,Líquido,919.39,846.68
 22,2200000,217.23,490.38,Líquido,930.37,843.71
 25,2500000,223.93,497.08,Líquido,961.37,835.21

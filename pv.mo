@@ -1,22 +1,22 @@
 model pv
-    output Real p(unit="bar", start=27);
-    output Real ppascal(unit="Pa",start=2700000);
+    Real p(unit="bar", start=27);
+    Real ppascal(unit="Pa",start=2700000);
 
-    output Real rho_v1(unit="kg/m3")
+    Real rho_v1(unit="kg/m3", start=13.497)
     "massa específica do vapor";
-    output Real rho_wt(unit="kg/m3")
+    Real rho_wt(unit="kg/m3", start=829.830)
     "massa específica dá água";
-    output Real h_v1(unit="kJ/kg")
+    Real h_v1(unit="kJ/kg", start=2800.30)
     "entalpia do vapor";
-    output Real h_wt(unit="kJ/kg")
+    Real h_wt(unit="kJ/kg", start=980.64)
     "entalpia do água";
+    Real u_wt, u_v1;
 
     constant Real h_f(unit="kJ/kg") = 441.841
     "entalpia da água de alimentação";
 
-    output Real u_wt, u_v1;
-    constant Real Q(unit="W") = 45409000;
-
+    constant Real Q(unit="W") = 45409000
+    "fluxo de calor";
     output Real m_f(unit="kg/s", start=1.927)
     "fluxo mássico de água que entra no tubulão";
     constant Real m_v1(unit="kg/s") = 1.927
@@ -47,11 +47,11 @@ model pv
 equation
     V_t = V_v1 + V_wt;
 
-    rho_v1  = 0.02772*p^2 - 4.14272*p + 921.4526;
-    rho_wt = 0.0006*p^2 + 0.46795*p + 0.4615;
-    t_metal  = -0.0325*p^2 + 3.7675*p + 150.055 + 273;
-    h_v1  = -0.0457*p^2 + 2.7905*p + 2758.3;
-    h_wt  = -0.1317*p^2 + 16.533*p + 630.33;
+    rho_v1  = 0.336208    + 0.483024*p - 0.000048*p^2 - 0.000008*p^3;
+    rho_wt  = 932.309732  - 5.454961*p + 0.080024*p^2 - 0.000687*p^3;
+    t_metal = 408.707924  + 5.521758*p - 0.102524*p^2 + 0.000922*p^3;
+    h_v1    = 2731.845759 + 5.941585*p - 0.169762*p^2 + 0.001615*p^3;
+    rho_wt  = 578.773728 + 22.682809*p - 0.373929*p^2 + 0.003151*p^3;
 
     ppascal = p*100000;
     u_v1 = h_v1 - 1000*(ppascal/rho_v1);
