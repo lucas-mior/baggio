@@ -52,7 +52,7 @@ model fornalha
     output Real h_g(unit="kJ/kg")
     "Entalpia dos gases de saída da fornalha";
 
-    Modelica.Blocks.Interfaces.RealInput T_ar_out(unit="K")
+    Modelica.Blocks.Interfaces.RealInput T_ar_out(unit="K", start=200)
     "Temperatura do ar pré-aquecido"
     annotation(Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-82, -82}, {82, 82}}, rotation = 0), iconTransformation(origin = {-66, 0}, extent = {{-34, -34}, {34, 34}}, rotation = 0)));
     Modelica.Blocks.Interfaces.RealOutput T_g(unit="K")
@@ -71,8 +71,8 @@ equation
 
     cp_ar_out = calor_especifico(T_ar_out-273);
     cp_ref = calor_especifico(T_ref);
-    cp_g = calor_especifico(T_g);
-    cp_ad = calor_especifico(T_ad);
+    cp_g = calor_especifico(T_g-273);
+    cp_ad = calor_especifico(T_ad-273);
 
     h_ar_out = cp_ar_out*T_ar_out - cp_ref*(T_ref+273);
     q_ar_out = m_ar_out*h_ar_out;

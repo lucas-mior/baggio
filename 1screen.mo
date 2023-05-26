@@ -41,7 +41,7 @@ model screen
     "Calor específico dos gases na saída do screen";
     output Real cp_ref(unit="kJ/(kg.degC)")
     "Calor específico de entrada dos gases do screen";
-    output Real T_ev(unit="K", displayUnit="degC", start=400)
+    output Real T_ev(unit="K", displayUnit="degC", start=200)
     "Temperatura de saída dos gases do screen";
     output Real T_ev_med(unit="K")
     "Temperatura média dos gases no screen";
@@ -54,20 +54,20 @@ model screen
     "Constante de transferência de calor por radiação do screen";
     constant Real alpha_conv_ev(unit="kW/K") = 0.8865
     "Constante de transferência de calor por convecção do screen";
-    Modelica.Blocks.Interfaces.RealOutput T_output(unit="degc") annotation(
+    Modelica.Blocks.Interfaces.RealOutput T_output(unit="K", start=200) annotation(
     Placement(visible = true, transformation(origin = {100, 0}, extent = {{-22, -22}, {22, 22}}, rotation = 0), iconTransformation(origin = {46, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
     cp_ref = calor_especifico(T_ref);
-    cp_ev = calor_especifico(T_ev);
+    cp_ev = calor_especifico(T_ev-273);
     
     T_ev_med = (T_g + T_ev)/2;
-    q_rad_ev = alpha_rad_ev * (T_ev_med^4 - (T_metal)^4);
-    q_conv_ev = alpha_conv_ev * (T_ev_med - (T_metal));
+    q_rad_ev = alpha_rad_ev * (T_ev_med^4 - (T_metal+273)^4);
+    q_conv_ev = alpha_conv_ev * (T_ev_med - (T_metal+273));
     
     q_ev = q_g - q_rad_ev - q_conv_ev;
     q_ev = (m_g*h_ev)/10;
 
-    h_ev = cp_ev*T_ev - cp_ref*(T_ref); 
+    h_ev = cp_ev*T_ev - cp_ref*(T_ref+273); 
     T_output = T_ev;
 
 annotation(
