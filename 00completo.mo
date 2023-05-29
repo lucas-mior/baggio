@@ -1,7 +1,7 @@
 model Completo
     function calor_especifico
         input Real T(unit="degC") "Temperatura";
-        output Real c "Calor específico";
+        output Real c(unit="kJ/(kg.degC)") "Calor específico";
     protected
         parameter Real A = 1.00269;
         parameter Real B = 3.4628e-5;
@@ -17,6 +17,7 @@ model Completo
     algorithm
         Tcelsius := Tkelvin - 273.15;
     end to_celsius;
+
     function to_kelvin
         input Real Tcelsius(unit="degC") "Temperatura em graus celsius";
         output Real Tkelvin(unit="K") "Temperatura em Kelvin";
@@ -25,7 +26,7 @@ model Completo
     end to_kelvin;
 
     model Fornalha
-        input Real T_ar_out(unit="K", displayUnit="degC", start=300+273)
+        input Real T_ar_out(unit="K", displayUnit="degC")
         "Temperatura do ar pré-aquecido";
         constant Real m_fuel(unit="kg/s") = 0.7942
         "Fluxo mássico de combustível";
@@ -114,12 +115,14 @@ model Completo
         "Fluxo de energia transferido por convecção no screen";
         output Real h_ev(unit="kJ/kg")
         "Entalpia dos gases na saída do screen";
-        output Real h_g(unit="kJ/kg");
+        output Real h_g(unit="kJ/kg")
+        "Entalpia dos gases na saída da fornalha";
         output Real cp_ev(unit="kJ/(kg.degC)")
         "Calor específico dos gases na saída do screen";
         output Real cp_ref(unit="kJ/(kg.degC)")
         "Calor específico de entrada dos gases do screen";
-        output Real cp_g(unit="kJ/(kg.degC)");
+        output Real cp_g(unit="kJ/(kg.degC)")
+        "Calor específico dos gases na saída da fornalha";
         output Real T_ev(unit="K", displayUnit="degC", start=500)
         "Temperatura de saída dos gases do screen";
         output Real T_ev_med(unit="K", displayUnit="degC")
@@ -152,7 +155,7 @@ model Completo
     
     Fornalha fornalha;
     Screen screen;
-    input Real T_ar_out(unit="degC");
+    input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(227));
 equation
     fornalha.T_ar_out = T_ar_out;
     screen.m_g = fornalha.m_g;
