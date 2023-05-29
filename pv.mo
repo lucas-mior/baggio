@@ -1,5 +1,6 @@
 model pv
-    Real p(unit="bar", start=27);
+    input Real p(unit="bar", start=27)
+    "Pressão";
 
     // rho, h e u são funções da pressão
     Real rho_v1(unit="kg/m3")
@@ -15,26 +16,27 @@ model pv
     Real u_v1(unit="kJ/kg")
     "energia interna do vapor";
 
-    parameter Real h_f(unit="kJ/kg") = 441.841
+    constant Real h_f(unit="kJ/kg") = 441.841
     "entalpia da água de alimentação";
-    parameter Real Q(unit="kW") = 4540.9000
+    Real Q(unit="kW")
     "fluxo de calor";
 
-    Real m_f(unit="kg/s", start=1.927)
+    Real m_f(unit="kg/s")
     "fluxo mássico de água que entra no tubulão";
-    Real m_v1(unit="kg/s") = 1.927
+    input Real m_v1(unit="kg/s", start=1.927)
     "fluxo mássico de água que saí do tubulão";
 
-    Real V_v1(unit="m3", start=2)
-    "volume total de vapor no sistema";
-    Real V_wt(unit="m3", start = 12.4645)
-    "volume total de água no sistema";
-    parameter Real V_t(unit="m3", start=14.4645)
+    input Real V_v1(unit="m3", start=2)
+    "volume de vapor no sistema";
+    Real V_wt(unit="m3")
+    "volume de água no sistema";
+    constant Real V_t(unit="m3") = 14.4645
     "volume total";
 
-    parameter Real m_t(unit="kg") = 12324.333
+
+    constant Real m_t(unit="kg") = 12324.333
     "massa total do metal";
-    parameter Real cp_metal(unit="kJ/(kg.degC)") = 0.550
+    constant Real cp_metal(unit="kJ/(kg.degC)") = 0.550
     "calor específico do metal";
     // t_metal é funçao da pressão
     Real t_metal(unit="K")
@@ -42,6 +44,7 @@ model pv
 
 equation
     V_t = V_v1 + V_wt;
+    //der(V_wt) = -der(V_v1);
 
     rho_v1  = 0.336208    + 0.483024*p - 0.000048*p^2 - 0.000008*p^3;
     rho_wt  = 932.309732  - 5.454961*p + 0.080024*p^2 - 0.000687*p^3;
@@ -51,12 +54,9 @@ equation
 
     u_v1 = h_v1 - 1000*(p/rho_v1);
     u_wt = h_wt - 1000*(p/rho_wt);
-
+    
     m_f - m_v1 = der(rho_v1*V_v1 + rho_wt*V_wt);
 
-    Q + m_f*h_f - m_v1*h_v1 
-    = der(rho_v1*u_v1*V_v1 + rho_wt*u_wt*V_wt +
-    m_t*cp_metal*t_metal);
+    Q + m_f*h_f - m_v1*h_v1 = der(rho_v1*u_v1*V_v1 + rho_wt*u_wt*V_wt + m_t*cp_metal*t_metal);
 
-    der(V_v1) = -der(V_wt);
 end pv;
