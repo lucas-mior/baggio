@@ -114,10 +114,12 @@ model completo
         "Fluxo de energia transferido por convecção no screen";
         output Real h_ev(unit="kJ/kg")
         "Entalpia dos gases na saída do screen";
+        output Real h_g(unit="kJ/kg");
         output Real cp_ev(unit="kJ/(kg.degC)")
         "Calor específico dos gases na saída do screen";
         output Real cp_ref(unit="kJ/(kg.degC)")
         "Calor específico de entrada dos gases do screen";
+        output Real cp_g(unit="kJ/(kg.degC)");
         output Real T_ev(unit="K", displayUnit="degC", start=500)
         "Temperatura de saída dos gases do screen";
         output Real T_ev_med(unit="K", displayUnit="degC")
@@ -132,17 +134,20 @@ model completo
         constant Real alpha_conv_ev(unit="kW/K") = 0.8865
         "Constante de transferência de calor por convecção do screen";
     equation
+        q_g - q_ev - q_rad_ev - q_conv_ev = 0;
+
         cp_ref = calor_especifico(T_ref);
         cp_ev = calor_especifico(to_celsius(T_ev));
+
+        cp_g = calor_especifico(to_celsius(T_g));
+        h_g = cp_g*T_g - cp_ref*to_kelvin(T_ref);
         
         T_ev_med = (T_g + T_ev)/2;
         q_rad_ev = alpha_rad_ev * (T_ev_med^4 - to_kelvin(T_metal)^4);
         q_conv_ev = alpha_conv_ev * (T_ev_med - to_kelvin(T_metal));
         
-        q_ev = q_g - q_rad_ev - q_conv_ev;
-        q_ev = (m_g*h_ev)/10;
-
         h_ev = cp_ev*T_ev - cp_ref*(to_kelvin(T_ref)); 
+        q_ev = (m_g*h_ev)/10;
     end screen;
     
     fornalha f;
