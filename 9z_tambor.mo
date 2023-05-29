@@ -1,4 +1,4 @@
-model pv
+model tambor
     Real p(unit="bar", start=27)
     "Pressão";
 
@@ -61,4 +61,4 @@ equation
 
     Q + m_f*h_f - m_v1*h_v1 = der(rho_v1*u_v1*V_v1 + rho_wt*u_wt*V_wt + m_t*cp_metal*t_metal);
 
-end pv;
+end tambor;
