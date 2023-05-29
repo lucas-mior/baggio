@@ -88,10 +88,10 @@ model completo
         h_ar_out = cp_ar_out*T_ar_out - cp_ref*(to_kelvin(T_ref));
         q_ar_out = m_ar_out*h_ar_out;
 
-        q_rad_f = alpha_rad_f*(T_for^4 - (T_metal+273)^4);
-        q_conv_f = alpha_conv_f*(T_for - (T_metal+273));
+        q_rad_f = alpha_rad_f*(T_for^4 - to_kelvin(T_metal)^4);
+        q_conv_f = alpha_conv_f*(T_for - to_kelvin(T_metal));
 
-        h_g = cp_g*T_g - cp_ref*(to_kelvin(T_metal));
+        h_g = cp_g*T_g - cp_ref*(to_kelvin(T_ref));
         q_g = (m_g*h_g)/10;
 
         T_ad = (q_fuel + q_ar_out)/(m_g*cp_ad*10);
@@ -133,16 +133,16 @@ model completo
         "Constante de transferência de calor por convecção do screen";
     equation
         cp_ref = calor_especifico(T_ref);
-        cp_ev = calor_especifico(T_ev-273);
+        cp_ev = calor_especifico(to_celsius(T_ev));
         
         T_ev_med = (T_g + T_ev)/2;
-        q_rad_ev = alpha_rad_ev * (T_ev_med^4 - (T_metal+273)^4);
-        q_conv_ev = alpha_conv_ev * (T_ev_med - (T_metal+273));
+        q_rad_ev = alpha_rad_ev * (T_ev_med^4 - to_kelvin(T_metal)^4);
+        q_conv_ev = alpha_conv_ev * (T_ev_med - to_kelvin(T_metal));
         
         q_ev = q_g - q_rad_ev - q_conv_ev;
         q_ev = (m_g*h_ev)/10;
 
-        h_ev = cp_ev*T_ev - cp_ref*(T_ref+273); 
+        h_ev = cp_ev*T_ev - cp_ref*(to_kelvin(T_ref)); 
     end screen;
     
     fornalha f;
