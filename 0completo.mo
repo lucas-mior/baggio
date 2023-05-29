@@ -99,43 +99,43 @@ model Completo
         T_for = (T_g + T_ad)/2;
     end Fornalha;
 
-    model Screen
+    model Evaporador
         input Real m_g(unit="kg/s")
         "Fluxo mássico dos gases";
         input Real T_g(unit="K", displayUnit="degC")
-        "Temperatura de entrada dos gases do screen";
+        "Temperatura de entrada dos gases do evaporador";
         input Real q_g(unit="kW")
-        "Fluxo de energia de entrada dos gases do screen";
+        "Fluxo de energia de entrada dos gases do evaporador";
 
         output Real q_ev(unit="kW")
-        "Fluxo de energia de saída do screen";
+        "Fluxo de energia de saída do evaporador";
         output Real q_rad_ev(unit="kW")
-        "Fluxo de energia transferido por radiação no screen";
+        "Fluxo de energia transferido por radiação no evaporador";
         output Real q_conv_ev(unit="kW")
-        "Fluxo de energia transferido por convecção no screen";
+        "Fluxo de energia transferido por convecção no evaporador";
         output Real h_ev(unit="kJ/kg")
-        "Entalpia dos gases na saída do screen";
+        "Entalpia dos gases na saída do evaporador";
         output Real h_g(unit="kJ/kg")
         "Entalpia dos gases na saída da fornalha";
         output Real cp_ev(unit="kJ/(kg.degC)")
-        "Calor específico dos gases na saída do screen";
+        "Calor específico dos gases na saída do evaporador";
         output Real cp_ref(unit="kJ/(kg.degC)")
-        "Calor específico de entrada dos gases do screen";
+        "Calor específico de entrada dos gases do evaporador";
         output Real cp_g(unit="kJ/(kg.degC)")
         "Calor específico dos gases na saída da fornalha";
         output Real T_ev(unit="K", displayUnit="degC", start=500)
-        "Temperatura de saída dos gases do screen";
+        "Temperatura de saída dos gases do evaporador";
         output Real T_ev_med(unit="K", displayUnit="degC")
-        "Temperatura média dos gases no screen";
+        "Temperatura média dos gases no evaporador";
 
         constant Real T_ref(unit="degC") = 25
         "Temperatura ambiente";
         constant Real T_metal(unit="degC") = 228
-        "Temperatura média dos tubos de metal no screen";
+        "Temperatura média dos tubos de metal no evaporador";
         constant Real alpha_rad_ev(unit="kW/K4") = 7.8998e-11
-        "Constante de transferência de calor por radiação do screen";
+        "Constante de transferência de calor por radiação do evaporador";
         constant Real alpha_conv_ev(unit="kW/K") = 0.8865
-        "Constante de transferência de calor por convecção do screen";
+        "Constante de transferência de calor por convecção do evaporador";
     equation
         q_g - q_ev - q_rad_ev - q_conv_ev = 0;
 
@@ -151,14 +151,19 @@ model Completo
         
         h_ev = cp_ev*T_ev - cp_ref*(to_kelvin(T_ref)); 
         q_ev = (m_g*h_ev);
-    end Screen;
+    end Evaporador;
+
+    model SuperAquecedor
+
+    equation
+    end SuperAquecedor
     
     Fornalha fornalha;
-    Screen screen;
+    Evaporador evaporador;
     input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
 equation
     fornalha.T_ar_out = T_ar_out;
-    screen.m_g = fornalha.m_g;
-    screen.T_g = fornalha.T_g;
-    screen.q_g = fornalha.q_g;
+    evaporador.m_g = fornalha.m_g;
+    evaporador.T_g = fornalha.T_g;
+    evaporador.q_g = fornalha.q_g;
 end Completo;
