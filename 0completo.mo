@@ -124,10 +124,6 @@ model Completo
         output Real T_ev_med(unit="K", displayUnit="degC")
         "Temperatura média dos gases no evaporador";
 
-        constant Real T_ref(unit="degC") = 25
-        "Temperatura ambiente";
-        constant Real T_metal(unit="degC") = 228
-        "Temperatura média dos tubos de metal no evaporador";
         constant Real alpha_rad_ev(unit="kW/K4") = 7.8998e-11
         "Constante de transferência de calor por radiação do evaporador";
         constant Real alpha_conv_ev(unit="kW/K") = 0.8865
@@ -164,7 +160,7 @@ model Completo
         Real cp_ref(unit="kJ/(kg.degC)")
         "Calor específico do ar na temperatura ambiente";
         Real cp_s(unit="kJ/(kg.degC)")
-        "Calor específico de saía dos gases do superaquecedor";
+        "Calor específico de saída dos gases do superaquecedor";
 
         input Real T_s(unit="K", displayUnit="degC")
         "temperatura de saída dos gases do superaquecedor";
