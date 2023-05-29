@@ -88,8 +88,8 @@ model completo
         h_ar_out = cp_ar_out*T_ar_out - cp_ref*(to_kelvin(T_ref));
         q_ar_out = (m_ar_out*h_ar_out)*1000;
 
-        q_rad_f = alpha_rad_f*(T_for^4 - to_kelvin(T_metal)^4);
-        q_conv_f = alpha_conv_f*(T_for - to_kelvin(T_metal));
+        q_rad_f = 1000*alpha_rad_f*(T_for^4 - to_kelvin(T_metal)^4);
+        q_conv_f = 1000*alpha_conv_f*(T_for - to_kelvin(T_metal));
 
         h_g = cp_g*T_g - cp_ref*(to_kelvin(T_ref));
         q_g = (m_g*h_g)*1000;
@@ -143,11 +143,11 @@ model completo
         h_g = cp_g*T_g - cp_ref*to_kelvin(T_ref);
         
         T_ev_med = (T_g + T_ev)/2;
-        q_rad_ev = alpha_rad_ev * (T_ev_med^4 - to_kelvin(T_metal)^4);
-        q_conv_ev = alpha_conv_ev * (T_ev_med - to_kelvin(T_metal));
+        q_rad_ev = 1000*alpha_rad_ev * (T_ev_med^4 - to_kelvin(T_metal)^4);
+        q_conv_ev = 1000*alpha_conv_ev * (T_ev_med - to_kelvin(T_metal));
         
         h_ev = cp_ev*T_ev - cp_ref*(to_kelvin(T_ref)); 
-        q_ev = (m_g*h_ev)*1000;
+        q_ev = 1000*(m_g*h_ev);
     end screen;
     
     fornalha f;
