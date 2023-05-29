@@ -25,6 +25,8 @@ model completo
     end to_kelvin;
 
     model fornalha
+        input Real T_ar_out(unit="K", displayUnit="degC", start=300+273)
+        "Temperatura do ar pré-aquecido";
         constant Real m_fuel(unit="kg/s") = 0.7942
         "Fluxo mássico de combustível";
         constant Real m_ar_out(unit="kg/s") = 3.7008
@@ -66,8 +68,6 @@ model completo
         output Real h_g(unit="kJ/kg")
         "Entalpia dos gases de saída da fornalha";
 
-        input Real T_ar_out(unit="K", displayUnit="degC", start=300+273)
-        "Temperatura do ar pré-aquecido";
         output Real T_g(unit="K", displayUnit="degC")
         "Temperatura de saída dos gases da fornalha";
         output Real q_g(unit="W")
@@ -86,15 +86,15 @@ model completo
         cp_ad = calor_especifico(to_celsius(T_ad));
 
         h_ar_out = cp_ar_out*T_ar_out - cp_ref*(to_kelvin(T_ref));
-        q_ar_out = m_ar_out*h_ar_out;
+        q_ar_out = (m_ar_out*h_ar_out)*1000;
 
         q_rad_f = alpha_rad_f*(T_for^4 - to_kelvin(T_metal)^4);
         q_conv_f = alpha_conv_f*(T_for - to_kelvin(T_metal));
 
         h_g = cp_g*T_g - cp_ref*(to_kelvin(T_ref));
-        q_g = (m_g*h_g)/10;
+        q_g = (m_g*h_g)*1000;
 
-        T_ad = (q_fuel + q_ar_out)/(m_g*cp_ad*10);
+        T_ad = (q_fuel + q_ar_out)/(m_g*cp_ad*1000);
         T_for = (T_g + T_ad)/2;
     end fornalha;
 
@@ -147,7 +147,7 @@ model completo
         q_conv_ev = alpha_conv_ev * (T_ev_med - to_kelvin(T_metal));
         
         h_ev = cp_ev*T_ev - cp_ref*(to_kelvin(T_ref)); 
-        q_ev = (m_g*h_ev)/10;
+        q_ev = (m_g*h_ev)*1000;
     end screen;
     
     fornalha f;
