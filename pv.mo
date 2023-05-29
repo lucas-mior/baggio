@@ -1,5 +1,5 @@
 model pv
-    input Real p(unit="bar", start=27)
+    Real p(unit="bar", start=27)
     "Pressão";
 
     // rho, h e u são funções da pressão
@@ -26,7 +26,7 @@ model pv
     input Real m_v1(unit="kg/s", start=1.927)
     "fluxo mássico de água que saí do tubulão";
 
-    input Real V_v1(unit="m3", start=2)
+    Real V_v1(unit="m3", start=2)
     "volume de vapor no sistema";
     Real V_wt(unit="m3")
     "volume de água no sistema";
@@ -43,6 +43,8 @@ model pv
     "temperatura do metal";
 
 equation
+    p = 27 + 0.1*sin(time/100);
+    V_v1 = 2+0.1*sin(time/100);
     V_t = V_v1 + V_wt;
     //der(V_wt) = -der(V_v1);
 
