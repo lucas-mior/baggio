@@ -36,10 +36,6 @@ model Completo
         "Constante de transferência de calor por radiação na fornalha";
         constant Real alpha_conv_f(unit="kW/degC") = 0.3758
         "Constante de transferência de calor por convecção na fornalha";
-        constant Real T_ref(unit="degC") = 25
-        "Temperatura ambiente";
-        constant Real T_metal(unit="degC") = 228
-        "Temperatura média dos tubos de metal na fornalha";
         constant Real PCI(unit="kJ/kg") = 8223
         "Poder calorífico inferior do combustível";
 
@@ -154,16 +150,50 @@ model Completo
     end Evaporador;
 
     model SuperAquecedor
+        input Real m_g(unit="kg/s");
+        input Real q_ev(unit="kW")
+        "fluxo de energia de entrada do superquecedor";
+        input Real T_ev(unit="K", displayUnit="degC")
+        "temperatura de entrada dos gases do superaquecedor";
+
+        Real q_rad_s(unit="kW");
+        Real q_conv_s(unit="kW");
+
+        Real cp_ev(unit="kJ/(kg.degC)")
+        "Calor específico dos gases na entrada do superaquecedor";
+        Real cp_ref(unit="kJ/(kg.degC)")
+        "Calor específico do ar na temperatura ambiente";
+        Real cp_s(unit="kJ/(kg.degC)")
+        "Calor específico de saía dos gases do superaquecedor";
+
+        input Real T_s(unit="K", displayUnit="degC")
+        "temperatura de saída dos gases do superaquecedor";
+        input Real T_v1(unit="K", displayUnit="degC")
+        "temperatura de entrada do vapor do superaquecedor";
+
+        output Real q_s(unit="kW");
 
     equation
-    end SuperAquecedor
+        q_ev - q_s - q_rad_s - q_conv_s = 0;
+
+    end SuperAquecedor;
     
+    constant Real T_ref(unit="degC") = 25
+    "Temperatura ambiente";
+    constant Real T_metal(unit="degC") = 228
+    "Temperatura média dos tubos de metal na fornalha";
+
+    input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
+
     Fornalha fornalha;
     Evaporador evaporador;
-    input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
+    SuperAquecedor superaquecedor;
 equation
     fornalha.T_ar_out = T_ar_out;
+
     evaporador.m_g = fornalha.m_g;
     evaporador.T_g = fornalha.T_g;
     evaporador.q_g = fornalha.q_g;
+
+    superaquecedor.m_g = fornalha.m_g; 
 end Completo;
