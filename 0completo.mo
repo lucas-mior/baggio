@@ -215,7 +215,7 @@ model Completo
 
     input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
 
-    model tambor
+    model Tambor
         Real p(unit="bar", start=27)
         "Pressão";
 
@@ -279,7 +279,7 @@ model Completo
 
         Q + m_f*h_f - m_v1*h_v1 = der(rho_v1*u_v1*V_v1 + rho_wt*u_wt*V_wt + m_t*cp_metal*t_metal);
 
-    end tambor;
+    end Tambor;
 
     Fornalha fornalha;
     Evaporador evaporador;
