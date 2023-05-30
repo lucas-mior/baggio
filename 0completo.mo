@@ -96,7 +96,7 @@ model Completo
     end Fornalha;
 
     model Evaporador
-        input Real m_g(unit="kg/s")
+        input Real m_g(unit="kg/s", start=)
         "Fluxo mássico dos gases";
         input Real T_g(unit="K", displayUnit="degC")
         "Temperatura de entrada dos gases do evaporador";
@@ -146,7 +146,9 @@ model Completo
     end Evaporador;
 
     model SuperAquecedor
-        input Real m_g(unit="kg/s");
+        // lado dos gases
+        input Real m_g(unit="kg/s", start=4.495)
+        "fluxo mássico dos gases";
         input Real q_ev(unit="kW")
         "fluxo de energia de entrada do superquecedor";
         input Real T_ev(unit="K", displayUnit="degC")
@@ -162,16 +164,42 @@ model Completo
         Real cp_s(unit="kJ/(kg.degC)")
         "Calor específico de saída dos gases do superaquecedor";
 
-        input Real T_s(unit="K", displayUnit="degC")
-        "temperatura de saída dos gases do superaquecedor";
-        input Real T_v1(unit="K", displayUnit="degC")
-        "temperatura de entrada do vapor do superaquecedor";
+        Real h_ev(unit="kJ/kg")
+        "Entalpia dos gases na entrada do evaporador";
+        Real h_s(unit="kJ/kg")
+        "Entalpia de saída dos gases do superaquecedor";
+
+        Real T_s(unit="K", displayUnit="degC");
+        Real T_sv(unit="K", displayUnit="degC");
+        Real T_s_med(unit="K", displayUnit="degC");
+        input Real T_v1(unit="K", displayUnit="degC", start=500);
+        Real T_metal_s(unit="K", displayUnit="degC");
 
         output Real q_s(unit="kW");
+
+        constant Real alpha_rad_s(unit="kW/(degC4)") = 2.2e-10;
+        constant Real alpha_conv_s(unit="kW/degC") = 2.25;
 
     equation
         q_ev - q_s - q_rad_s - q_conv_s = 0;
 
+        cp_ref = calor_especifico(T_ref);
+        cp_ev = calor_especifico(to_celsius(T_ev));
+        cp_s = calor_especifico(to_celsius(T_s));
+
+        h_ev = cp_ev*T_ev - cp_ref*to_kelvin(T_ref);
+        q_ev = m_g*h_ev;
+
+        q_rad_s = alpha_rad_s*(to_celsius(T_s)^4 - T_metal^4);
+        q_conv_s = alpha_rad_s*(T_s - to_kelvin(T_metal));
+
+        h_s = cp_s*T_s - cp_ref*T_ref;
+        q_s = m_g*h_s;
+
+        T_s_med = (T_ev + T_s)/2;
+        T_metal_s = (T_ev + T_s)/6 + (T_v1 + T_sv)/3;
+
+    // lado da água
     end SuperAquecedor;
     
     constant Real T_ref(unit="degC") = 25
