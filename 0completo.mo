@@ -265,6 +265,7 @@ model Completo
         V_t = V_v1 + V_wt;
         //der(V_wt) = -der(V_v1);
 
+        // polinômios obtidos por regressão linear
         rho_v1  = 0.336208    + 0.483024*p - 0.000048*p^2 - 0.000008*p^3;
         rho_wt  = 932.309732  - 5.454961*p + 0.080024*p^2 - 0.000687*p^3;
         t_metal = 408.707924  + 5.521758*p - 0.102524*p^2 + 0.000922*p^3;
