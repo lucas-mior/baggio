@@ -261,7 +261,7 @@ model Completo
 
     equation
         p = 27 + 0.1*sin(time/100);
-        V_v1 = 2+0.1*sin(time/100);
+        V_v1 = 2 + 0.1*sin(time/100);
         V_t = V_v1 + V_wt;
         //der(V_wt) = -der(V_v1);
 
