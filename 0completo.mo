@@ -206,15 +206,6 @@ model Completo
     // lado da água
     end SuperAquecedor;
     
-    constant Real cp_ref(unit="kJ/(kg.degC)") = 1.007
-    "Calor específico do ar ambiente";
-    constant Real T_ref(unit="degC") = 25
-    "Temperatura ambiente";
-    constant Real T_metal(unit="degC") = 228
-    "Temperatura média dos tubos de metal na fornalha";
-
-    input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
-
     model Tambor
         Real p(unit="bar", start=27)
         "Pressão";
@@ -250,7 +241,6 @@ model Completo
         constant Real V_t(unit="m3") = 14.4645
         "volume total";
 
-
         constant Real m_t(unit="kg") = 12324.333
         "massa total do metal";
         constant Real cp_metal(unit="kJ/(kg.degC)") = 0.550
@@ -280,6 +270,15 @@ model Completo
         Q + m_f*h_f - m_v1*h_v1 = der(rho_v1*u_v1*V_v1 + rho_wt*u_wt*V_wt + m_t*cp_metal*t_metal);
 
     end Tambor;
+
+    constant Real cp_ref(unit="kJ/(kg.degC)") = 1.007
+    "Calor específico do ar ambiente";
+    constant Real T_ref(unit="degC") = 25
+    "Temperatura ambiente";
+    constant Real T_metal(unit="degC") = 228
+    "Temperatura média dos tubos de metal na fornalha";
+
+    input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
 
     Fornalha fornalha;
     Evaporador evaporador;
