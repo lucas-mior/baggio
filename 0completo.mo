@@ -48,7 +48,7 @@ model Completo
         "fluxo mássico de ar pré-aquecido";
 
         Real T_for(unit="K", displayUnit="degC")
-        "temperatura média dos gases na fornalha";
+        "temperatura média dos gases da fornalha";
         Real T_ad(unit="K", displayUnit="degC", start=100)
         "temperatura adiabática da chama";
         Real cp_g(unit="kJ/(kg.degC)")
@@ -63,9 +63,9 @@ model Completo
         output Real q_ar_out(unit="kW")
         "fluxo de energia do ar pré-aquecido";
         Real q_rad_f(unit="kW")
-        "fluxo de calor por radiação na fornalha";
+        "fluxo de calor por radiação da fornalha";
         Real q_conv_f(unit="kW")
-        "fluxo de calor por convecção na fornalha";
+        "fluxo de calor por convecção da fornalha";
         output Real h_ar_out(unit="kJ/kg")
         "entalpia do ar pré-aquecido";
         output Real h_g(unit="kJ/kg")
@@ -111,21 +111,21 @@ model Completo
         output Real q_ev(unit="kW")
         "fluxo de energia de saída do evaporador";
         output Real q_rad_ev(unit="kW")
-        "fluxo de calor por radiação no evaporador";
+        "fluxo de calor por radiação do evaporador";
         output Real q_conv_ev(unit="kW")
-        "fluxo de calor por convecção no evaporador";
+        "fluxo de calor por convecção do evaporador";
         output Real h_ev(unit="kJ/kg")
-        "entalpia dos gases na saída do evaporador";
+        "entalpia dos gases de saída do evaporador";
         output Real h_g(unit="kJ/kg")
-        "entalpia dos gases na saída da fornalha";
+        "entalpia dos gases de saída da fornalha";
         output Real cp_ev(unit="kJ/(kg.degC)")
-        "calor específico dos gases na saída do evaporador";
+        "calor específico dos gases de saída do evaporador";
         output Real cp_g(unit="kJ/(kg.degC)")
-        "calor específico dos gases na saída da fornalha";
+        "calor específico dos gases de saída da fornalha";
         output Real T_ev(unit="K", displayUnit="degC", start=500)
         "temperatura de saída dos gases do evaporador";
         output Real T_ev_med(unit="K", displayUnit="degC")
-        "temperatura média dos gases no evaporador";
+        "temperatura média dos gases do evaporador";
 
     equation
         q_g - q_ev - q_rad_ev - q_conv_ev = 0;
@@ -143,7 +143,6 @@ model Completo
     end Evaporador;
 
     model SuperAquecedorGases
-        // lado dos gases
         input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
         input Real q_ev(unit="kW")
@@ -152,9 +151,9 @@ model Completo
         "temperatura dos gases de entrada do superaquecedor";
 
         Real q_rad_s(unit="kW")
-        "fluxo de calor por radiação no superaquecedor";
+        "fluxo de calor por radiação do superaquecedor";
         Real q_conv_s(unit="kW")
-        "fluxo de calor por convecção no superaquecedor";
+        "fluxo de calor por convecção do superaquecedor";
         output Real q_s(unit="kW")
         "fluxo de energia de saída dos gases do superaquecedor";
 
@@ -169,15 +168,15 @@ model Completo
         "entalpia dos gases de saída do superaquecedor";
 
         input Real T_v1(unit="K", displayUnit="degC", start=500)
-        "temperatura do vapor de entrada no superaquecedor";
+        "temperatura do vapor de entrada do superaquecedor";
         Real T_sv(unit="K", displayUnit="degC")
         "temperatura do vapor de saída do superaquecedor";
         Real T_metal_s(unit="K", displayUnit="degC")
-        "temperatura dos tubos de metal média no superaquecedor";
+        "temperatura dos tubos de metal média do superaquecedor";
         output Real T_s(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do superaquecedor";
         Real T_s_med(unit="K", displayUnit="degC")
-        "temperatura dos gases média no superaquecedor";
+        "temperatura dos gases média do superaquecedor";
 
     equation
         q_ev - q_s - q_rad_s - q_conv_s = 0;
@@ -206,30 +205,30 @@ model Completo
         "fluxo mássico de vapor de saída do superaquecedor";
 
         input Real q_v1(unit="kW")
-        "fluxo de energia de entrada no superaquecedor";
+        "fluxo de energia de entrada do superaquecedor";
         Real q_sv(unit="kW")
         "fluxo de energia de saída dos gases do superaquecedor";
         Real q_conv_s_v1(unit="kW")
-        "fluxo de calor por convecção para o vapor no superaquecedor";
+        "fluxo de calor por convecção para o vapor do superaquecedor";
         Real q_rad_s(unit="kW")
-        "fluxo de calor por radiação no superaquecedor";
+        "fluxo de calor por radiação do superaquecedor";
         Real q_conv_s(unit="kW")
-        "fluxo de calor por convecção no superaquecedor";
+        "fluxo de calor por convecção do superaquecedor";
 
         Real h_v1(unit="kJ/kg")
-        "entalpia do vapor na entrada do superaquecedor";
+        "entalpia do vapor de entrada do superaquecedor";
         Real h_sv(unit="kJ/kg")
-        "entalpia do vapor na saída do superaquecedor";
+        "entalpia do vapor de saída do superaquecedor";
 
         Real cp_v1(unit="kJ/(kg.degC)")
-        "calor específico do vapor na entrada do superaquecedor";
+        "calor específico do vapor de entrada do superaquecedor";
         Real cp_sv(unit="kJ/(kg.degC)")
-        "calor específico do vapor na saída do superaquecedor";
+        "calor específico do vapor de saída do superaquecedor";
 
         input Real T_v1(unit="K", displayUnit="degC")
-        "temperatura do vapor na entrada no superaquecedor";
+        "temperatura do vapor de entrada do superaquecedor";
         output Real T_sv(unit="K", displayUnit="degC")
-        "temperatura do vapor na saída no superaquecedor";
+        "temperatura do vapor de saída do superaquecedor";
 
 
     equation
@@ -255,33 +254,89 @@ model Completo
 
         input Real q_s(unit="kW")
         "fluxo de energia de entrada da passagem de tubos";
+        Real q_rad_1(unit="kW")
+        "fluxo de calor por radiação da passagem de tubos";
+        Real q_conv_1(unit="kW")
+        "fluxo de calor por convecção da passagem de tubos";
         output Real q_1(unit="kW")
         "fluxo de energia de saída da passagem de tubos";
-        Real q_rad_1(unit="kW")
-        "fluxo de calor por radiação na passagem de tubos";
-        Real q_conv_1(unit="kW")
-        "fluxo de calor por convecção na passagem de tubos";
 
         Real h_s(unit="kJ/kg")
-        "entalpia dos gases na entrada da passagem de tubos";
+        "entalpia dos gases de entrada da passagem de tubos";
         Real h_1(unit="kJ/kg")
-        "entalpia dos gases na saída da passagem de tubos";
+        "entalpia dos gases de saída da passagem de tubos";
         Real cp_s(unit="kJ/(kg.degC)")
-        "calor específico dos gases na entrada da passagem de tubos";
+        "calor específico dos gases de entrada da passagem de tubos";
         Real cp_1(unit="kJ/(kg.degC)")
-        "calor específico dos gases na saída da passagem de tubos";
+        "calor específico dos gases de saída da passagem de tubos";
 
+        input Real T_1(unit="K", displayUnit="degC")
+        "temperatura dos gases de saída da passagem de tubos";
         Real T_sv(unit="K", displayUnit="degC")
         "temperatura dos gases de entrada da passagem de tubos";
-        Real T_1(unit="K", displayUnit="degC")
-        "temperatura dos gases de saída da passagem de tubos";
         Real T_1_med(unit="K", displayUnit="degC")
         "temperatura dos gases média da passagem de tubos";
         Real T_metal(unit="K", displayUnit="degC")
         "temperatura dos tubos de metal média da passagem de tubos";
 
     equation
+        q_s - q_1 - q_rad_1 - q_conv_1 = 0;
+
+        cp_1 = calor_especifico_gas(to_celsius(T_1));
+        q_s = m_g*h_s;
+        h_s = cp_s*T_s - cp_ref*T_ref;
+
+        q_rad_1 = alpha_rad_1*(to_celsius(T_1)^4 - to_celsius(T_metal)^4);
+        q_conv_1 = alpha_conv_1*(to_celsius(T_1) - to_celsius(T_metal));
+
+        q_1 = m_g*h_1;
+        h_1 = cp_1*T_1 - cp_ref*T_ref;
+        T_1_med = (T_s + T_1)/2;
     end PassagemTubos;
+
+    model Economizador
+        input Real m_g(unit="kg/s")
+        "fluxo mássico dos gases";
+
+        input Real q_1(unit="kW")
+        "fluxo de energia de entrada do economizador";
+        Real q_rad_ec(unit="kW")
+        "fluxo de calor por radiação do economizador";
+        Real q_conv_ec(unit="kW")
+        "fluxo de calor por convecção do economizador";
+        output Real q_ec(unit="kW")
+        "fluxo de calor de saída do economizador";
+
+        Real h_1(unit="kJ/kg")
+        "entalpia dos gases de entrada do economizador";
+        Real h_ec(unit="kJ/kg")
+        "entalpia dos gases de saída do economizador";
+        Real cp_1(unit="kJ/(kg.degC)")
+        "calor específico dos gases de entrada do economizador";
+        Real cp_ec(unit="kJ/(kg.degC)")
+        "calor específico dos gases de saída do economizador";
+
+        input Real T_1(unit="K", displayUnit="degC")
+        "temperatura dos gases de entrada do economizador";
+        Real T_ec(unit="K", displayUnit="degC")
+        "temperatura dos gases de saída do economizador";
+        Real T_metal(unit="K", displayUnit="degC")
+        "temperatura dos tubos de metal média do economizador";
+
+    equation
+        q_1 - q_ec - q_rad_ec - q_conv_ec = 0;
+
+        cp_1 = calor_especifico_gas(to_celsius(T_1));
+        q_1 = m_g*h_1;
+
+        h_s = cp_s*T_s - cp_ref*T_ref;
+
+        q_rad_1 = alpha_rad_1*(to_celsius(T_1)^4 - to_celsius(T_metal)^4);
+        q_conv_1 = alpha_conv_1*(to_celsius(T_1) - to_celsius(T_metal));
+
+        h_1 = cp_1*T_1 - cp_ref*T_ref;
+        T_1_med = (T_s + T_1)/2;
+    end Economizador;
     
     model Tambor
         Real p(unit="bar", start=27)
@@ -307,9 +362,9 @@ model Completo
         "fluxo de calor";
 
         Real m_f(unit="kg/s")
-        "fluxo mássico de água que entra no tubulão";
+        "fluxo mássico de água de entrada do tubulão";
         input Real m_v1(unit="kg/s", start=1.927)
-        "fluxo mássico de água que saí do tubulão";
+        "fluxo mássico de água de saída do tubulão";
 
         Real V_v1(unit="m3", start=2)
         "volume de vapor";
@@ -354,12 +409,12 @@ model Completo
     constant Real T_ref(unit="degC") = 25
     "temperatura ambiente";
     constant Real T_metal(unit="degC") = 228
-    "temperatura média dos tubos de metal na fornalha";
+    "temperatura média dos tubos de metal da fornalha";
 
     constant Real alpha_rad_f(unit="kW/(degC4)") = 3.5721e-10
-    "constante de calor por radiação na fornalha";
+    "constante de calor por radiação da fornalha";
     constant Real alpha_conv_f(unit="kW/degC") = 0.3758
-    "constante de calor por convecção na fornalha";
+    "constante de calor por convecção da fornalha";
     constant Real alpha_rad_ev(unit="kW/K4") = 7.8998e-11
     "constante de calor por radiação do evaporador";
     constant Real alpha_conv_ev(unit="kW/K") = 0.8865
