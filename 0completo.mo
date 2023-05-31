@@ -46,10 +46,6 @@ model Completo
         "fluxo mássico de combustível";
         constant Real m_ar_out(unit="kg/s") = 3.7008
         "fluxo mássico de ar pré-aquecido";
-        constant Real alpha_rad_f(unit="kW/(degC4)") = 3.5721e-10
-        "constante de calor por radiação na fornalha";
-        constant Real alpha_conv_f(unit="kW/degC") = 0.3758
-        "constante de calor por convecção na fornalha";
 
         Real T_for(unit="K", displayUnit="degC")
         "temperatura média dos gases na fornalha";
@@ -131,10 +127,6 @@ model Completo
         output Real T_ev_med(unit="K", displayUnit="degC")
         "temperatura média dos gases no evaporador";
 
-        constant Real alpha_rad_ev(unit="kW/K4") = 7.8998e-11
-        "constante de calor por radiação do evaporador";
-        constant Real alpha_conv_ev(unit="kW/K") = 0.8865
-        "constante de calor por convecção do evaporador";
     equation
         q_g - q_ev - q_rad_ev - q_conv_ev = 0;
 
@@ -186,11 +178,6 @@ model Completo
         "temperatura dos gases de saída do superaquecedor";
         Real T_s_med(unit="K", displayUnit="degC")
         "temperatura dos gases média no superaquecedor";
-
-        constant Real alpha_rad_s(unit="kW/(degC4)") = 2.2e-10;
-        "constante de calor por radiação do superaquecedor";
-        constant Real alpha_conv_s(unit="kW/degC") = 2.25;
-        "constante de calor por convecção do superaquecedor";
 
     equation
         q_ev - q_s - q_rad_s - q_conv_s = 0;
@@ -368,6 +355,29 @@ model Completo
     "temperatura ambiente";
     constant Real T_metal(unit="degC") = 228
     "temperatura média dos tubos de metal na fornalha";
+
+    constant Real alpha_rad_f(unit="kW/(degC4)") = 3.5721e-10
+    "constante de calor por radiação na fornalha";
+    constant Real alpha_conv_f(unit="kW/degC") = 0.3758
+    "constante de calor por convecção na fornalha";
+    constant Real alpha_rad_ev(unit="kW/K4") = 7.8998e-11
+    "constante de calor por radiação do evaporador";
+    constant Real alpha_conv_ev(unit="kW/K") = 0.8865
+    "constante de calor por convecção do evaporador";
+    constant Real alpha_rad_s(unit="kW/(degC4)") = 2.2e-10;
+    "constante de calor por radiação do superaquecedor";
+    constant Real alpha_conv_s(unit="kW/degC") = 2.25;
+    "constante de calor por convecção do superaquecedor";
+    constant Real alpha_rad_1(unit="kW/(degC4)") = 4.423e-10
+    "constante de calor por radiação da passagem";
+    constant Real alpha_conv_1(unit="kW/degC") = 5.14
+    "constante de calor por convecção da passagem";
+    constant Real alpha_rad_ec(unit="kW/(degC4)") = 3.3634e-10
+    "constante de calor por radiação do economizador";
+    constant Real alpha_conv_ec(unit="kW/degC") = 2.2556
+    "constante de calor por convecção do economizador";
+    constant Real alpha_conv_ec(unit="kW/degC") = 5.8235
+    "constante de calor por convecção do pré-aquecedor";
 
     input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
 
