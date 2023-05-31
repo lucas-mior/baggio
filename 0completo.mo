@@ -294,15 +294,15 @@ model Completo
         T_1_med = (T_s + T_1)/2;
     end PassagemTubos;
 
-    model Economizador
+    model EconomizadorGases
         input Real m_g(unit="kg/s")
         "fluxo mássico dos gases";
 
         input Real q_1(unit="kW")
         "fluxo de energia de entrada do economizador";
-        Real q_rad_ec(unit="kW")
+        output Real q_rad_ec(unit="kW")
         "fluxo de calor por radiação do economizador";
-        Real q_conv_ec(unit="kW")
+        output Real q_conv_ec(unit="kW")
         "fluxo de calor por convecção do economizador";
         output Real q_ec(unit="kW")
         "fluxo de calor de saída do economizador";
@@ -344,8 +344,52 @@ model Completo
         T_ec_med = (T_ec + T_1)/2
 
         T_metal_ec = (T_agua + T_f)/2;
-    end Economizador;
+    end EconomizadorGases;
     
+    model EconomizadorAgua
+        input Real m_agua(unit="kg/s")
+        "fluxo mássico de água de entrada do economizador";
+        output Real m_f(unit="kg/s")
+        "fluxo mássico de água de saída do economizador";
+
+        input Real q_agua(unit="kW")
+        "fluxo de energia da água de entrada do economizador";
+        output Real q_f(unit="kW")
+        "fluxo de energia de saída do economizador";
+        input Real q_rad_ec(unit="kW")
+        "fluxo de calor por radiação do economizador";
+        input Real q_conv_ec(unit="kW")
+        "fluxo de calor por convecção do economizador";
+        output Real q_conv_ec_f(unit="kW")
+        "fluxo de calor por convecção para a água do economizador";
+
+        Real h_agua(unit="kJ/kg")
+        "entalpia da água de entrada do economizador";
+        Real h_f(unit="kJ/kg")
+        "entalpia da água de saída do economizador";
+        Real cp_agua(unit="kJ/(kg.degC)")
+        "calor específico da água de entrada do economizador";
+        Real cp_f(unit="kJ/(kg.degC)")
+        "calor específico da água de saída do economizador";
+
+        input Real T_agua(unit="K", displayUnit="degC")
+        "temperatura da água de entrada do economizador";
+        output Real T_f(unit="K", displayUnit="degC")
+        "temperatura da água de saída do economizador";
+
+    equation
+        q_agua - q_f + q_conv_ec_f = 0;
+
+        cp_agua = calor_especifico_agua(to_celsius(T_agua));
+        q_agua = m_agua*h_agua;
+        h_agua = cp_agua*T_agua - cp_ref*T_ref;
+
+        q_conv_ec_f = q_rad_ec + q_conv_ec;
+
+        h_f = cp_f*T_f - cp_ref*T_ref;
+        q_f = m_f*h_f;
+    end EconomizadorAgua;
+
     model Tambor
         Real p(unit="bar", start=27)
         "pressão";
