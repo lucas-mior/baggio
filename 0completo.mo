@@ -390,6 +390,41 @@ model Completo
         q_f = m_f*h_f;
     end EconomizadorAgua;
 
+    model PreAquecedorGases
+        input Real q_ec(unit="kW")
+        "fluxo de energia da água de entrada do pré-aquecedor";
+        output Real q_pre(unit="kW")
+        "fluxo de energia de saída do pré-aquecedor";
+        output Real q_conv_pre(unit="kW")
+        "fluxo de calor por convecção do pré-aquecedor";
+
+        Real h_ec(unit="kJ/kg")
+        "entalpia dos gases de entrada do pré-aquecedor";
+        Real h_pre(unit="kJ/kg")
+        "entalpia da água de saída do pré-aquecedor";
+        Real cp_ec(unit="kJ/(kg.degC)")
+        "calor específico dos gases de entrada do pré-aquecedor";
+        Real cp_pre(unit="kJ/(kg.degC)")
+        "calor específico dos gases de saída do pré-aquecedor";
+
+        input Real T_ec(unit="K", displayUnit="degC")
+        "temperatura dos gases de entrada do pré-aquecedor";
+        output Real T_ar(unit="K", displayUnit="degC")
+        "temperatura da água de saída do pré-aquecedor";
+
+    equation
+        q_agua - q_f + q_conv_ec_f = 0;
+
+        cp_agua = calor_especifico_agua(to_celsius(T_agua));
+        q_agua = m_agua*h_agua;
+        h_agua = cp_agua*T_agua - cp_ref*T_ref;
+
+        q_conv_ec_f = q_rad_ec + q_conv_ec;
+
+        h_f = cp_f*T_f - cp_ref*T_ref;
+        q_f = m_f*h_f;
+    end PreAquecedorGases;
+
     model Tambor
         Real p(unit="bar", start=27)
         "pressão";
