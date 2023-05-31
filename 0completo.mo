@@ -409,11 +409,17 @@ model Completo
 
         input Real T_ec(unit="K", displayUnit="degC")
         "temperatura dos gases de entrada do pré-aquecedor";
-        output Real T_ar(unit="K", displayUnit="degC")
-        "temperatura da água de saída do pré-aquecedor";
+        Real T_ar(unit="K", displayUnit="degC")
+        "temperatura do ar de saída do pré-aquecedor";
+        Real T_pre(unit="K", displayUnit="degC")
+        "temperatura dos gases de saída do pré-aquecedor";
+        Real T_pre_med(unit="K", displayUnit="degC")
+        "temperatura dos gases média do pré-aquecedor";
+        Real T_metal_pre(unit="K", displayUnit="degC")
+        "temperatura dos gases média do pré-aquecedor";
 
     equation
-        q_agua - q_f + q_conv_ec_f = 0;
+        q_ec - q_pre - q_conv_pre = 0;
 
         cp_agua = calor_especifico_agua(to_celsius(T_agua));
         q_agua = m_agua*h_agua;
