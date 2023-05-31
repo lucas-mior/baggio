@@ -18,6 +18,13 @@ model Completo
         c := 1.0356 - 0.00022*T + 4.1E-7*T^2;
     end calor_especifico_ar;
 
+    function calor_especifico_vapor
+        input Real T(unit="degC") "Temperatura";
+        output Real c(unit="kJ/(kg.degC)") "Calor específico";
+    algorithm
+        c := 4
+    end calor_especifico_vapor;
+
     function to_celsius
         input Real Tkelvin(unit="K") "Temperatura em Kelvin";
         output Real Tcelsius(unit="degC") "Temperatura em graus celsius";
@@ -241,6 +248,16 @@ model Completo
     equation
         m_v1 = m_sv;
         q_v1 - q_sv + q_conv_s_v1 = 0;
+
+        cp_v1 = calor_especifico_vapor(T_v1);
+        cp_sv = calor_especifico_vapor(T_sv);
+
+        q_v1 = m_v1*h_v1;
+        h_v1 = cp_v1*T_v1 - cp_ref*T_ref;
+
+        q_conv_s_v1 = q_rad_s + q_conv_s;
+        q_sv = m_sv*h_sv;
+        h_sv = cp_sv*T_sv - cp_ref*T_ref;
 
 
     end SuperAquecedorVapor;
