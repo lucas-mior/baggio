@@ -320,7 +320,13 @@ model Completo
         "temperatura dos gases de entrada do economizador";
         Real T_ec(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do economizador";
-        Real T_metal(unit="K", displayUnit="degC")
+        Real T_agua(unit="K", displayUnit="degC")
+        "temperatura da água de entrada do economizador";
+        Real T_f(unit="K", displayUnit="degC")
+        "temperatura da água de saída do economizador";
+        Real T_ec_med(unit="K", displayUnit="degC")
+        "temperatura dos gases média do economizador";
+        Real T_metal_ec(unit="K", displayUnit="degC")
         "temperatura dos tubos de metal média do economizador";
 
     equation
@@ -328,14 +334,16 @@ model Completo
 
         cp_1 = calor_especifico_gas(to_celsius(T_1));
         q_1 = m_g*h_1;
-
-        h_s = cp_s*T_s - cp_ref*T_ref;
-
-        q_rad_1 = alpha_rad_1*(to_celsius(T_1)^4 - to_celsius(T_metal)^4);
-        q_conv_1 = alpha_conv_1*(to_celsius(T_1) - to_celsius(T_metal));
-
         h_1 = cp_1*T_1 - cp_ref*T_ref;
-        T_1_med = (T_s + T_1)/2;
+
+        q_rad_ec = alpha_rad_ec*(to_celsius(T_1)^4 - to_celsius(T_metal)^4);
+        q_conv_ec = alpha_conv_ec*(to_celsius(T_1) - to_celsius(T_metal));
+
+        h_ec = cp_ec*T_ec - cp_ref*T_ref;
+        q_ec = m_g*h_ec;
+        T_ec_med = (T_ec + T_1)/2
+
+        T_metal_ec = (T_agua + T_f)/2;
     end Economizador;
     
     model Tambor
