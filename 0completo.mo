@@ -261,6 +261,39 @@ model Completo
 
 
     end SuperAquecedorVapor;
+
+    model PassagemTubos
+        input Real m_g(unit="kg/s");
+
+        input Real q_s(unit="kW")
+        "fluxo de energia de entrada da passagem de tubos";
+        output Real q_1(unit="kW");
+        "fluxo de energia de saída da passagem de tubos";
+        Real q_rad_1(unit="kW")
+        "fluxo de calor por radiação na passagem de tubos";
+        Real q_conv_1(unit="kW")
+        "fluxo de calor por convecção na passagem de tubos";
+
+        Real h_s(unit="kJ/kg")
+        "entalpia dos gases na entrada da passagem de tubos";
+        Real h_1(unit="kJ/kg")
+        "entalpia dos gases na saída da passagem de tubos";
+        Real cp_s(unit="kJ/(kg.degC)")
+        "calor específico dos gases na entrada da passagem de tubos";
+        Real cp_1(unit="kJ/(kg.degC)")
+        "calor específico dos gases na saída da passagem de tubos";
+
+        Real T_sv(unit="K", displayUnit="degC")
+        "temperatura de entrada dos gases do passagem de tubos";
+        Real T_1(unit="K", displayUnit="degC")
+        "temperatura de saída dos gases do passagem de tubos";
+        Real T_1_med(unit="K", displayUnit="degC")
+        "temperatura média dos gases do passagem de tubos";
+        Real T_metal(unit="K", displayUnit="degC")
+        "temperatura média dos tubos de metal da passagem de tubos";
+
+    equation
+    end PassagemTubos;
     
     model Tambor
         Real p(unit="bar", start=27)
