@@ -263,7 +263,8 @@ model Completo
     end SuperAquecedorVapor;
 
     model PassagemTubos
-        input Real m_g(unit="kg/s");
+        input Real m_g(unit="kg/s")
+        "fluxo mássico dos gases";
 
         input Real q_s(unit="kW")
         "fluxo de energia de entrada da passagem de tubos";
