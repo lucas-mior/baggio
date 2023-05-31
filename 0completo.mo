@@ -22,7 +22,7 @@ model Completo
         input Real T(unit="degC") "Temperatura";
         output Real c(unit="kJ/(kg.degC)") "Calor específico";
     algorithm
-        c := 4
+        c := 4;
     end calor_especifico_vapor;
 
     function to_celsius
@@ -255,7 +255,7 @@ model Completo
 
         input Real q_s(unit="kW")
         "fluxo de energia de entrada da passagem de tubos";
-        output Real q_1(unit="kW");
+        output Real q_1(unit="kW")
         "fluxo de energia de saída da passagem de tubos";
         Real q_rad_1(unit="kW")
         "fluxo de calor por radiação na passagem de tubos";
@@ -364,9 +364,9 @@ model Completo
     "constante de calor por radiação do evaporador";
     constant Real alpha_conv_ev(unit="kW/K") = 0.8865
     "constante de calor por convecção do evaporador";
-    constant Real alpha_rad_s(unit="kW/(degC4)") = 2.2e-10;
+    constant Real alpha_rad_s(unit="kW/(degC4)") = 2.2e-10
     "constante de calor por radiação do superaquecedor";
-    constant Real alpha_conv_s(unit="kW/degC") = 2.25;
+    constant Real alpha_conv_s(unit="kW/degC") = 2.25
     "constante de calor por convecção do superaquecedor";
     constant Real alpha_rad_1(unit="kW/(degC4)") = 4.423e-10
     "constante de calor por radiação da passagem";
@@ -376,7 +376,7 @@ model Completo
     "constante de calor por radiação do economizador";
     constant Real alpha_conv_ec(unit="kW/degC") = 2.2556
     "constante de calor por convecção do economizador";
-    constant Real alpha_conv_ec(unit="kW/degC") = 5.8235
+    constant Real alpha_conv_pre(unit="kW/degC") = 5.8235
     "constante de calor por convecção do pré-aquecedor";
 
     input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
