@@ -527,13 +527,14 @@ model Completo
     constant Real alpha_conv_pre(unit="kW/degC") = 5.8235
     "constante de calor por convecção do pré-aquecedor";
 
-    input Real T_ar_out(unit="K", displayUnit="degC", start=to_kelvin(200));
-
     Fornalha fornalha;
     Evaporador evaporador;
     SuperAquecedorGases superaquecedor_gases;
     SuperAquecedorVapor superaquecedor_vapor;
+    PreAquecedorGases preaquecedor_gases;
+    PreAquecedorAgua preaquecedor_agua;
 equation
+    fornalha.T_ar_out = pre_aquecedor.T_ar;
     fornalha.T_ar_out = T_ar_out;
 
     evaporador.m_g = fornalha.m_g;
