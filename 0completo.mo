@@ -248,9 +248,11 @@ model Completo
     model PassagemTubos
         input Real m_g(unit="kg/s")
         "fluxo mássico dos gases";
-
+        input Real T_s(unit="K", displayUnit="degC")
+        "temperatura dos gases de entrada da passagem de tubos";
         input Real q_s(unit="kW")
         "fluxo de energia de entrada da passagem de tubos";
+
         Real q_rad_1(unit="kW")
         "fluxo de calor por radiação da passagem de tubos";
         Real q_conv_1(unit="kW")
@@ -269,8 +271,6 @@ model Completo
 
         input Real T_1(unit="K", displayUnit="degC")
         "temperatura dos gases de saída da passagem de tubos";
-        Real T_sv(unit="K", displayUnit="degC")
-        "temperatura dos gases de entrada da passagem de tubos";
         Real T_1_med(unit="K", displayUnit="degC")
         "temperatura dos gases média da passagem de tubos";
         Real T_metal(unit="K", displayUnit="degC")
