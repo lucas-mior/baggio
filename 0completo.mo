@@ -200,16 +200,16 @@ model Completo
     end SuperAquecedorGases;
 
     model SuperAquecedorVapor
-        input Real m_v1(unit="kg/s")
+        input Real m_v1(unit="kg/s", start=3)
         "fluxo mássico de vapor de entrada do superaquecedor";
         output Real m_sv(unit="kg/s")
         "fluxo mássico de vapor de saída do superaquecedor";
 
-        input Real q_v1(unit="kW")
+        Real q_v1(unit="kW")
         "fluxo de energia de entrada do superaquecedor";
         output Real q_sv(unit="kW")
         "fluxo de energia de saída dos gases do superaquecedor";
-        output Real q_conv_s_v1(unit="kW")
+        Real q_conv_s_v1(unit="kW")
         "fluxo de calor por convecção para o vapor do superaquecedor";
 
         input Real q_rad_s(unit="kW", start=500)
@@ -226,7 +226,7 @@ model Completo
         Real h_sv(unit="kJ/kg")
         "entalpia do vapor de saída do superaquecedor";
 
-        input Real T_v1(unit="K", displayUnit="degC")
+        input Real T_v1(unit="K", displayUnit="degC", start=400)
         "temperatura do vapor de entrada do superaquecedor";
         output Real T_sv(unit="K", displayUnit="degC")
         "temperatura do vapor de saída do superaquecedor";
@@ -240,7 +240,7 @@ model Completo
         cp_sv = calor_especifico_vapor(T_sv);
 
         q_v1 = m_v1*h_v1;
-        h_v1 = cp_v1*T_v1 - cp_ref*T_ref;
+        h_v1 = cp_v1*T_v1 - cp_ref*to_kelvin(T_ref);
 
         q_conv_s_v1 = q_rad_s + q_conv_s;
 
