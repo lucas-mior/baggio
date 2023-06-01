@@ -169,7 +169,7 @@ model Completo
         Real h_s(unit="kJ/kg")
         "entalpia dos gases de saída do superaquecedor";
 
-        input Real T_sv(unit="K", displayUnit="degC")
+        input Real T_sv(unit="K", displayUnit="degC", start=100)
         "temperatura do vapor de saída do superaquecedor";
         Real T_metal_s(unit="K", displayUnit="degC")
         "temperatura dos tubos de metal média do superaquecedor";
@@ -240,13 +240,12 @@ model Completo
         h_sv = cp_sv*T_sv - cp_ref*T_ref;
         q_sv = m_sv*h_sv;
 
-
     end SuperAquecedorVapor;
 
     model PassagemTubos
-        input Real m_g(unit="kg/s")
+        input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
-        input Real T_s(unit="K", displayUnit="degC")
+        input Real T_s(unit="K", displayUnit="degC", start=800)
         "temperatura dos gases de entrada da passagem de tubos";
         input Real q_s(unit="kW")
         "fluxo de energia de entrada da passagem de tubos";
@@ -258,16 +257,12 @@ model Completo
         output Real q_1(unit="kW")
         "fluxo de energia de saída da passagem de tubos";
 
-        Real cp_s(unit="kJ/(kg.degC)")
-        "calor específico dos gases de entrada da passagem de tubos";
         Real cp_1(unit="kJ/(kg.degC)")
         "calor específico dos gases de saída da passagem de tubos";
-        Real h_s(unit="kJ/kg")
-        "entalpia dos gases de entrada da passagem de tubos";
         Real h_1(unit="kJ/kg")
         "entalpia dos gases de saída da passagem de tubos";
 
-        input Real T_1(unit="K", displayUnit="degC")
+        output Real T_1(unit="K", displayUnit="degC")
         "temperatura dos gases de saída da passagem de tubos";
         Real T_1_med(unit="K", displayUnit="degC")
         "temperatura dos gases média da passagem de tubos";
@@ -279,13 +274,9 @@ model Completo
         q_s - q_1 - q_rad_1 - q_conv_1 = 0;
 
         cp_1 = calor_especifico_gas(to_celsius(T_1));
-        cp_s = calor_especifico_gas(to_celsius(T_s));
 
-        q_s = m_g*h_s;
-        h_s = cp_s*T_s - cp_ref*T_ref;
-
-        q_rad_1 = alpha_rad_1*(to_celsius(T_1)^4 - to_celsius(T_metal)^4);
-        q_conv_1 = alpha_conv_1*(to_celsius(T_1) - to_celsius(T_metal));
+        q_rad_1 = alpha_rad_1*(to_celsius(T_1_med)^4 - to_celsius(T_metal)^4);
+        q_conv_1 = alpha_conv_1*(to_celsius(T_1_med) - to_celsius(T_metal));
 
         q_1 = m_g*h_1;
         h_1 = cp_1*T_1 - cp_ref*to_kelvin(T_ref);
@@ -294,7 +285,7 @@ model Completo
     end PassagemTubos;
 
     model EconomizadorGases
-        input Real m_g(unit="kg/s")
+        input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
 
         input Real q_1(unit="kW")
@@ -390,7 +381,7 @@ model Completo
     end EconomizadorAgua;
 
     model PreAquecedorGases
-        input Real m_g(unit="kg/s")
+        input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
         input Real q_ec(unit="kW")
         "fluxo de energia da água de entrada do pré-aquecedor";
