@@ -152,9 +152,9 @@ model Completo
         input Real T_ev(unit="K", displayUnit="degC", start=800)
         "temperatura dos gases de entrada do superaquecedor";
 
-        Real q_rad_s(unit="kW")
+        output Real q_rad_s(unit="kW")
         "fluxo de calor por radiação do superaquecedor";
-        Real q_conv_s(unit="kW")
+        output Real q_conv_s(unit="kW")
         "fluxo de calor por convecção do superaquecedor";
         output Real q_s(unit="kW")
         "fluxo de energia de saída dos gases do superaquecedor";
@@ -188,8 +188,8 @@ model Completo
         h_ev = cp_ev*T_ev - cp_ref*to_kelvin(T_ref);
         q_ev = m_g*h_ev;
 
-        q_rad_s = alpha_rad_s*(to_celsius(T_s)^4 - T_metal_s^4);
-        q_conv_s = alpha_rad_s*(to_celsius(T_s) - T_metal_s);
+        q_rad_s = alpha_rad_s*(to_celsius(T_s_med)^4 - T_metal_s^4);
+        q_conv_s = alpha_rad_s*(to_celsius(T_s_med) - T_metal_s);
 
         h_s = cp_s*T_s - cp_ref*to_kelvin(T_ref);
         q_s = m_g*h_s;
@@ -212,9 +212,9 @@ model Completo
         output Real q_conv_s_v1(unit="kW")
         "fluxo de calor por convecção para o vapor do superaquecedor";
 
-        Real q_rad_s(unit="kW")
+        input Real q_rad_s(unit="kW", start=500)
         "fluxo de calor por radiação do superaquecedor";
-        Real q_conv_s(unit="kW")
+        input Real q_conv_s(unit="kW", start=500)
         "fluxo de calor por convecção do superaquecedor";
 
         Real cp_v1(unit="kJ/(kg.degC)")
@@ -243,6 +243,7 @@ model Completo
         h_v1 = cp_v1*T_v1 - cp_ref*T_ref;
 
         q_conv_s_v1 = q_rad_s + q_conv_s;
+
         q_sv = m_sv*h_sv;
         h_sv = cp_sv*T_sv - cp_ref*T_ref;
 
