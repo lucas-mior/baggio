@@ -151,6 +151,8 @@ model Completo
         "fluxo de energia de entrada do superquecedor";
         input Real T_ev(unit="K", displayUnit="degC", start=800)
         "temperatura dos gases de entrada do superaquecedor";
+        input Real T_v1(unit="K", displayUnit="degC", start=500)
+        "temperatura do vapor de entrada do superaquecedor";
 
         output Real q_rad_s(unit="kW")
         "fluxo de calor por radiação do superaquecedor";
@@ -159,18 +161,15 @@ model Completo
         output Real q_s(unit="kW")
         "fluxo de energia de saída dos gases do superaquecedor";
 
-        Real cp_ev(unit="kJ/(kg.degC)")
-        "calor específico dos gases de entrada do superaquecedor";
+        output Real T_s(unit="K", displayUnit="degC")
+        "temperatura dos gases de saída do superaquecedor";
+
         Real cp_s(unit="kJ/(kg.degC)")
         "calor específico dos gases de saída do superaquecedor";
         Real h_s(unit="kJ/kg")
         "entalpia dos gases de saída do superaquecedor";
 
-        output Real T_s(unit="K", displayUnit="degC")
-        "temperatura dos gases de saída do superaquecedor";
-        input Real T_v1(unit="K", displayUnit="degC", start=500)
-        "temperatura do vapor de entrada do superaquecedor";
-        Real T_sv(unit="K", displayUnit="degC")
+        input Real T_sv(unit="K", displayUnit="degC")
         "temperatura do vapor de saída do superaquecedor";
         Real T_metal_s(unit="K", displayUnit="degC")
         "temperatura dos tubos de metal média do superaquecedor";
@@ -180,7 +179,6 @@ model Completo
     equation
         q_ev - q_s - q_rad_s - q_conv_s = 0;
 
-        cp_ev = calor_especifico_gas(to_celsius(T_ev));
         cp_s = calor_especifico_gas(to_celsius(T_s));
 
         q_rad_s = alpha_rad_s*(to_celsius(T_s_med)^4 - T_metal_s^4);
