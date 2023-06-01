@@ -474,7 +474,7 @@ model Completo
         "temperatura do ar de saída do pré-aquecedor";
 
     equation
-        q_ar_in - q_ar_out + q_conv_T_pre_ar = 0;
+        q_ar_in - q_ar_out + q_conv_pre_ar = 0;
 
         cp_ar_in = calor_especifico_ar(to_celsius(T_ar_in));
         cp_ar_out = calor_especifico_ar(to_celsius(T_ar_out));
@@ -530,7 +530,8 @@ model Completo
         m_tur - m_spray - m_sv = 0;
         q_tur - q_sv - q_spray = 0;
 
-        cp_tur = cp_sv = cp_spray;
+        cp_tur = cp_sv;
+        cp_sv = cp_spray;
         cp_spray = 4.17;
         q_tur = m_tur*h_tur;
         h_tur = cp_tur*T_tur - cp_ref*to_kelvin(T_ref);
