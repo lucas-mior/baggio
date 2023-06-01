@@ -147,9 +147,9 @@ model Completo
     model SuperAquecedorGases
         input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
-        input Real q_ev(unit="kW")
+        input Real q_ev(unit="kW", start=500)
         "fluxo de energia de entrada do superquecedor";
-        input Real T_ev(unit="K", displayUnit="degC", start=1000)
+        input Real T_ev(unit="K", displayUnit="degC", start=800)
         "temperatura dos gases de entrada do superaquecedor";
 
         Real q_rad_s(unit="kW")
