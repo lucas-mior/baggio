@@ -163,8 +163,6 @@ model Completo
         "calor específico dos gases de entrada do superaquecedor";
         Real cp_s(unit="kJ/(kg.degC)")
         "calor específico dos gases de saída do superaquecedor";
-        Real h_ev(unit="kJ/kg")
-        "entalpia dos gases de entrada do evaporador";
         Real h_s(unit="kJ/kg")
         "entalpia dos gases de saída do superaquecedor";
 
@@ -185,9 +183,6 @@ model Completo
         cp_ev = calor_especifico_gas(to_celsius(T_ev));
         cp_s = calor_especifico_gas(to_celsius(T_s));
 
-        h_ev = cp_ev*T_ev - cp_ref*to_kelvin(T_ref);
-        q_ev = m_g*h_ev;
-
         q_rad_s = alpha_rad_s*(to_celsius(T_s_med)^4 - T_metal_s^4);
         q_conv_s = alpha_rad_s*(to_celsius(T_s_med) - T_metal_s);
 
@@ -200,8 +195,8 @@ model Completo
     end SuperAquecedorGases;
 
     model SuperAquecedorVapor
-        input Real m_v1(unit="kg/s", start=3)
-        "fluxo mássico de vapor de entrada do superaquecedor";
+        // input Real m_v1(unit="kg/s", start=3)
+        // "fluxo mássico de vapor de entrada do superaquecedor";
         output Real m_sv(unit="kg/s")
         "fluxo mássico de vapor de saída do superaquecedor";
 
@@ -282,9 +277,12 @@ model Completo
         "temperatura dos tubos de metal média da passagem de tubos";
 
     equation
+        T_metal = T_sat;
         q_s - q_1 - q_rad_1 - q_conv_1 = 0;
 
         cp_1 = calor_especifico_gas(to_celsius(T_1));
+        cp_s = calor_especifico_gas(to_celsius(T_s));
+
         q_s = m_g*h_s;
         h_s = cp_s*T_s - cp_ref*T_ref;
 
@@ -292,7 +290,8 @@ model Completo
         q_conv_1 = alpha_conv_1*(to_celsius(T_1) - to_celsius(T_metal));
 
         q_1 = m_g*h_1;
-        h_1 = cp_1*T_1 - cp_ref*T_ref;
+        h_1 = cp_1*T_1 - cp_ref*to_kelvin(T_ref);
+
         T_1_med = (T_s + T_1)/2;
     end PassagemTubos;
 
@@ -484,10 +483,6 @@ model Completo
     model Dessuperaquecedor
         input Real m_sv(unit="kg/s")
         "fluxo mássico de vapor de entrada do dessuperaquecedor";
-        input Real m_spray(unit="kg/s")
-        "fluxo mássico de água de entrada do dessuperaquecedor";
-        output Real m_tur(unit="kg/s")
-        "fluxo mássico de água de saída do dessuperaquecedor";
 
         input Real q_sv(unit="kW")
         "fluxo de energia do vapor de entrada do dessuperaquecedor";
@@ -598,6 +593,12 @@ model Completo
     "fluxo mássico de combustível";
     constant Real m_ar(unit="kg/s") = 3.7008
     "fluxo mássico de ar pré-aquecido";
+    constant Real m_v1(unit="kg/s") = 1.927
+    "fluxo mássico de vapor";
+    constant Real m_tur(unit="kg/s") = 2.0833
+    "fluxo mássico de água de saída do dessuperaquecedor";
+    constant Real m_spray(unit="kg/s") = 0.1564
+    "fluxo mássico de água de entrada do dessuperaquecedor";
     constant Real PCI(unit="kJ/kg") = 8223
     "poder calorífico inferior do combustível";
     constant Real cp_ref(unit="kJ/(kg.degC)") = 1.007
