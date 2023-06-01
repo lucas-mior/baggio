@@ -482,6 +482,12 @@ model Completo
         T_metal_pre = (T_ec + T_pre + T_ref + T_ar)/4;
     end PreAquecedorAr;
 
+    model Dessuperaquecedor
+
+    equation
+
+    end Dessuperaquecedor;
+
     model Tambor
         Real p(unit="bar", start=27)
         "pressão";
