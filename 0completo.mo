@@ -98,9 +98,9 @@ model Completo
     model Evaporador
         input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
-        input Real T_g(unit="K", displayUnit="degC")
+        input Real T_g(unit="K", displayUnit="degC", start=800)
         "temperatura dos gases de entrada do evaporador";
-        input Real q_g(unit="kW")
+        input Real q_g(unit="kW", start=1000)
         "fluxo de energia dos gases de entrada do evaporador";
 
         output Real q_ev(unit="kW")
