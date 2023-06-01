@@ -234,13 +234,13 @@ model Completo
         cp_v1 = calor_especifico_vapor(T_v1);
         cp_sv = calor_especifico_vapor(T_sv);
 
-        q_v1 = m_v1*h_v1;
         h_v1 = cp_v1*T_v1 - cp_ref*to_kelvin(T_ref);
+        q_v1 = m_v1*h_v1;
 
         q_conv_s_v1 = q_rad_s + q_conv_s;
 
-        q_sv = m_sv*h_sv;
         h_sv = cp_sv*T_sv - cp_ref*T_ref;
+        q_sv = m_sv*h_sv;
 
 
     end SuperAquecedorVapor;
