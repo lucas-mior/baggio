@@ -42,11 +42,7 @@ model Completo
     model Fornalha
         input Real T_ar_out(unit="K", displayUnit="degC", start=400)
         "temperatura do ar pré-aquecido";
-        constant Real m_fuel(unit="kg/s") = 0.7942
-        "fluxo mássico de combustível";
-        constant Real m_ar_out(unit="kg/s") = 3.7008
-        "fluxo mássico de ar pré-aquecido";
-        input Real q_ar_out(unit="kW")
+        input Real q_ar_out(unit="kW", start=50)
         "fluxo de energia do ar pré-aquecido";
 
         Real T_for(unit="K", displayUnit="degC")
@@ -69,8 +65,6 @@ model Completo
         "calor específico dos gases para temperatura adiabática";
         Real cp_ar_out(unit="kJ/(kg.degC)")
         "calor específico do ar pré-aquecido";
-        Real h_ar_out(unit="kJ/kg")
-        "entalpia do ar pré-aquecido";
         Real h_g(unit="kJ/kg")
         "entalpia dos gases de saída da fornalha";
 
@@ -81,7 +75,7 @@ model Completo
         output Real m_g(unit="kg/s")
         "fluxo mássico dos gases";
     equation
-        m_g - m_fuel - m_ar_out = 0;
+        m_g - m_fuel - m_ar = 0;
         q_fuel + q_ar_out - q_g - q_rad_f - q_conv_f = 0;
         
         q_fuel = m_fuel*PCI;
@@ -89,9 +83,6 @@ model Completo
         cp_ar_out = calor_especifico_ar(T_ar_out);
         cp_g = calor_especifico_gas(to_celsius(T_g));
         cp_ad = calor_especifico_gas(to_celsius(T_ad));
-
-        h_ar_out = cp_ar_out*T_ar_out - cp_ref*(to_kelvin(T_ref));
-        q_ar_out = m_ar_out*h_ar_out;
 
         T_metal = to_kelvin(T_sat);
         q_rad_f = alpha_rad_f*(to_celsius(T_for)^4 - T_metal^4);
@@ -480,15 +471,13 @@ model Completo
         cp_ar_out = calor_especifico_ar(to_celsius(T_ar_out));
 
         h_ar_in = cp_ar_in*T_ar_in - cp_ref*T_ref;
-        q_ar_in = m_ar_in*h_ar_in;
-
-        h_pre = cp_pre*T_pre - cp_ref*T_ref;
-        q_pre = m_g*h_pre;
+        q_ar_in = m_ar*h_ar_in;
 
         q_conv_pre_ar = q_conv_pre;
 
-        T_pre_med = (T_ec + T_pre)/2;
-        T_metal_pre = (T_ec + T_pre + T_ref + T_ar)/4;
+        h_ar_out = cp_ar_out*T_ar_out - cp_ref*T_ref;
+        q_ar_out = m_ar*h_ar_out;
+
     end PreAquecedorAr;
 
     model Dessuperaquecedor
@@ -501,9 +490,9 @@ model Completo
 
         input Real q_sv(unit="kW")
         "fluxo de energia do vapor de entrada do dessuperaquecedor";
-        input Real q_sv(unit="kW")
+        input Real q_spray(unit="kW")
         "fluxo de energia da água de entrada do dessuperaquecedor";
-        output Real q_sv(unit="kW")
+        output Real q_tur(unit="kW")
         "fluxo de energia do vapor de saída do dessuperaquecedor";
 
         Real cp_tur(unit="kJ/(kg.degC)")
@@ -604,6 +593,10 @@ model Completo
 
     end Tambor;
 
+    constant Real m_fuel(unit="kg/s") = 0.7942
+    "fluxo mássico de combustível";
+    constant Real m_ar(unit="kg/s") = 3.7008
+    "fluxo mássico de ar pré-aquecido";
     constant Real PCI(unit="kJ/kg") = 8223
     "poder calorífico inferior do combustível";
     constant Real cp_ref(unit="kJ/(kg.degC)") = 1.007
@@ -645,8 +638,7 @@ model Completo
     PreAquecedorGases preaquecedor_gases;
     PreAquecedorAr preaquecedor_ar;
 equation
-    fornalha.T_ar_out = pre_aquecedor.T_ar;
-    fornalha.T_ar_out = T_ar_out;
+    fornalha.T_ar_out = preaquecedor_ar.T_ar_out;
 
     evaporador.m_g = fornalha.m_g;
     evaporador.T_g = fornalha.T_g;
