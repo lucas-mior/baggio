@@ -22,7 +22,7 @@ model Completo
         input Real T(unit="degC") "Temperatura";
         output Real c(unit="kJ/(kg.degC)") "Calor específico";
     algorithm
-        c := 4;
+        c := 4.18;
     end calor_especifico_vapor;
 
     function to_celsius
@@ -395,7 +395,7 @@ model Completo
         "fluxo de energia da água de entrada do pré-aquecedor";
         output Real q_pre(unit="kW")
         "fluxo de energia de saída do pré-aquecedor";
-        output Real q_conv_pre(unit="kW")
+        Real q_conv_pre(unit="kW")
         "fluxo de calor por convecção do pré-aquecedor";
 
         Real h_ec(unit="kJ/kg")
@@ -421,15 +421,66 @@ model Completo
     equation
         q_ec - q_pre - q_conv_pre = 0;
 
-        cp_agua = calor_especifico_agua(to_celsius(T_agua));
-        q_agua = m_agua*h_agua;
-        h_agua = cp_agua*T_agua - cp_ref*T_ref;
+        cp_ec = calor_especifico_gas(to_celsius(T_ec));
+        cp_pre = calor_especifico_gas(to_celsius(T_pre));
 
-        q_conv_ec_f = q_rad_ec + q_conv_ec;
+        h_ec = cp_ec*T_ec - cp_ref*T_ref;
+        q_ec = m_g*h_ec;
 
-        h_f = cp_f*T_f - cp_ref*T_ref;
-        q_f = m_f*h_f;
+        h_pre = cp_pre*T_pre - cp_ref*T_ref;
+        q_pre = m_g*h_pre;
+
+        q_conv_pre = alpha_conv_pre*(T_pre_med - T_metal_pre);
+
+        T_pre_med = (T_ec + T_pre)/2;
+        T_metal_pre = (T_ec + T_pre + T_ref + T_ar)/4;
     end PreAquecedorGases;
+
+    model PreAquecedorAr
+        input Real q_ec(unit="kW")
+        "fluxo de energia da água de entrada do pré-aquecedor";
+        output Real q_pre(unit="kW")
+        "fluxo de energia de saída do pré-aquecedor";
+        Real q_conv_pre(unit="kW")
+        "fluxo de calor por convecção do pré-aquecedor";
+
+        Real h_ec(unit="kJ/kg")
+        "entalpia dos gases de entrada do pré-aquecedor";
+        Real h_pre(unit="kJ/kg")
+        "entalpia da água de saída do pré-aquecedor";
+        Real cp_ec(unit="kJ/(kg.degC)")
+        "calor específico dos gases de entrada do pré-aquecedor";
+        Real cp_pre(unit="kJ/(kg.degC)")
+        "calor específico dos gases de saída do pré-aquecedor";
+
+        input Real T_ec(unit="K", displayUnit="degC")
+        "temperatura dos gases de entrada do pré-aquecedor";
+        Real T_ar_in(unit="K", displayUnit="degC")
+        "temperatura do ar de entrada do pré-aquecedor";
+        Real T_ar_out(unit="K", displayUnit="degC")
+        "temperatura do ar de saída do pré-aquecedor";
+        Real T_pre_med(unit="K", displayUnit="degC")
+        "temperatura dos gases média do pré-aquecedor";
+        Real T_metal_pre(unit="K", displayUnit="degC")
+        "temperatura dos gases média do pré-aquecedor";
+
+    equation
+        q_ar_in - q_ar_out + q_conv_T_pre_ar = 0;
+
+        cp_ar_in = calor_especifico_ar(to_celsius(T_ar_in));
+        cp_ar_out = calor_especifico_ar(to_celsius(T_ar_out));
+
+        h_ar_in = cp_ar_in*T_ar_in - cp_ref*T_ref;
+        q_ar_in = m_ar_in*h_ar_in;
+
+        h_pre = cp_pre*T_pre - cp_ref*T_ref;
+        q_pre = m_g*h_pre;
+
+        q_conv_pre = alpha_conv_pre*(T_pre_med - T_metal_pre);
+
+        T_pre_med = (T_ec + T_pre)/2;
+        T_metal_pre = (T_ec + T_pre + T_ref + T_ar)/4;
+    end PreAquecedorAr;
 
     model Tambor
         Real p(unit="bar", start=27)
@@ -532,7 +583,7 @@ model Completo
     SuperAquecedorGases superaquecedor_gases;
     SuperAquecedorVapor superaquecedor_vapor;
     PreAquecedorGases preaquecedor_gases;
-    PreAquecedorAgua preaquecedor_agua;
+    PreAquecedorAr preaquecedor_ar;
 equation
     fornalha.T_ar_out = pre_aquecedor.T_ar;
     fornalha.T_ar_out = T_ar_out;
