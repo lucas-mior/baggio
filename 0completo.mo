@@ -247,7 +247,7 @@ model Completo
         "fluxo mássico dos gases";
         input Real T_s(unit="K", displayUnit="degC", start=800)
         "temperatura dos gases de entrada da passagem de tubos";
-        input Real q_s(unit="kW")
+        input Real q_s(unit="kW", start=400)
         "fluxo de energia de entrada da passagem de tubos";
 
         Real q_rad_1(unit="kW")
@@ -473,9 +473,9 @@ model Completo
         input Real m_sv(unit="kg/s")
         "fluxo mássico de vapor de entrada do dessuperaquecedor";
 
-        input Real q_sv(unit="kW")
+        input Real q_sv(unit="kW", start=300)
         "fluxo de energia do vapor de entrada do dessuperaquecedor";
-        input Real q_spray(unit="kW")
+        input Real q_spray(unit="kW", start=100)
         "fluxo de energia da água de entrada do dessuperaquecedor";
         output Real q_tur(unit="kW")
         "fluxo de energia do vapor de saída do dessuperaquecedor";
