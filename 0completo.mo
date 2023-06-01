@@ -341,7 +341,7 @@ model Completo
 
         h_ec = cp_ec*T_ec - cp_ref*T_ref;
         q_ec = m_g*h_ec;
-        T_ec_med = (T_ec + T_1)/2
+        T_ec_med = (T_ec + T_1)/2;
 
         T_metal_ec = (T_agua + T_f)/2;
     end EconomizadorGases;
