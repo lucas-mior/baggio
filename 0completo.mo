@@ -288,7 +288,7 @@ model Completo
         input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
 
-        input Real q_1(unit="kW")
+        input Real q_1(unit="kW", start=400)
         "fluxo de energia de entrada do economizador";
         output Real q_rad_ec(unit="kW")
         "fluxo de calor por radiação do economizador";
@@ -296,13 +296,9 @@ model Completo
         "fluxo de calor por convecção do economizador";
         output Real q_ec(unit="kW")
         "fluxo de calor de saída do economizador";
-
-        Real h_1(unit="kJ/kg")
-        "entalpia dos gases de entrada do economizador";
+    
         Real h_ec(unit="kJ/kg")
         "entalpia dos gases de saída do economizador";
-        Real cp_1(unit="kJ/(kg.degC)")
-        "calor específico dos gases de entrada do economizador";
         Real cp_ec(unit="kJ/(kg.degC)")
         "calor específico dos gases de saída do economizador";
 
@@ -310,9 +306,9 @@ model Completo
         "temperatura dos gases de entrada do economizador";
         Real T_ec(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do economizador";
-        Real T_agua(unit="K", displayUnit="degC")
+        output Real T_agua(unit="K", displayUnit="degC")
         "temperatura da água de entrada do economizador";
-        Real T_f(unit="K", displayUnit="degC")
+        input Real T_f(unit="K", displayUnit="degC")
         "temperatura da água de saída do economizador";
         Real T_ec_med(unit="K", displayUnit="degC")
         "temperatura dos gases média do economizador";
@@ -322,14 +318,11 @@ model Completo
     equation
         q_1 - q_ec - q_rad_ec - q_conv_ec = 0;
 
-        cp_1 = calor_especifico_gas(to_celsius(T_1));
-        q_1 = m_g*h_1;
-        h_1 = cp_1*T_1 - cp_ref*T_ref;
+        cp_ec = calor_especifico_gas(to_celsius(T_ec));
+        q_rad_ec = alpha_rad_ec*(to_celsius(T_1)^4 - to_celsius(T_metal_ec)^4);
+        q_conv_ec = alpha_conv_ec*(to_celsius(T_1) - to_celsius(T_metal_ec));
 
-        q_rad_ec = alpha_rad_ec*(to_celsius(T_1)^4 - to_celsius(T_metal)^4);
-        q_conv_ec = alpha_conv_ec*(to_celsius(T_1) - to_celsius(T_metal));
-
-        h_ec = cp_ec*T_ec - cp_ref*T_ref;
+        h_ec = cp_ec*T_ec - cp_ref*to_kelvin(T_ref);
         q_ec = m_g*h_ec;
         T_ec_med = (T_ec + T_1)/2;
 
