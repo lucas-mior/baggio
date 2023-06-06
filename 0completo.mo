@@ -441,52 +441,36 @@ model Completo
 
     end PreAquecedorAr;
 
-    model Dessuperaquecedor
-        input Real m_sv(unit="kg/s")
-        "fluxo mássico de vapor de entrada do dessuperaquecedor";
-
-        input Real q_sv(unit="kW", start=300)
-        "fluxo de energia do vapor de entrada do dessuperaquecedor";
-        input Real q_spray(unit="kW", start=100)
-        "fluxo de energia da água de entrada do dessuperaquecedor";
-        output Real q_tur(unit="kW")
-        "fluxo de energia do vapor de saída do dessuperaquecedor";
-
-        Real cp_tur(unit="kJ/(kg.degC)")
-        "calor específico do vapor de saída do dessuperaquecedor";
-        Real cp_sv(unit="kJ/(kg.degC)")
-        "calor específico do vapor de entrada do dessuperaquecedor";
-        Real cp_spray(unit="kJ/(kg.degC)")
-        "calor específico da água de entrada do dessuperaquecedor";
-        Real h_tur(unit="kJ/kg")
-        "entalpia do vapor de saída do dessuperaquecedor";
-        Real h_sv(unit="kJ/kg")
-        "entalpia do vapor de entrada do dessuperaquecedor";
-        Real h_spray(unit="kJ/kg")
-        "entalpia da água de entrada do dessuperaquecedor";
-
-        Real T_tur(unit="K", displayUnit="degC")
-        "temperatura do vapor de saída do dessuperaquecedor";
-        Real T_sv(unit="K", displayUnit="degC")
-        "temperatura do vapor de entrada do dessuperaquecedor";
-        Real T_spray(unit="K", displayUnit="degC")
-        "temperatura da água de entrada do dessuperaquecedor";
-
-    equation
-        m_tur - m_spray - m_sv = 0;
-        q_tur - q_sv - q_spray = 0;
-
-        cp_tur = cp_sv;
-        cp_sv = cp_spray;
-        cp_spray = calor_especifico_agua(T_spray);
-        q_tur = m_tur*h_tur;
-        h_tur = cp_tur*T_tur - cp_ref*to_kelvin(T_ref);
-        q_sv = m_sv*h_sv;
-        h_sv = cp_sv*T_sv - cp_ref*to_kelvin(T_ref);
-        q_spray = m_spray*h_spray;
-        h_spray = cp_spray*T_spray - cp_ref*to_kelvin(T_ref);
-
-    end Dessuperaquecedor;
+  model Dessuperaquecedor
+      input Real m_sv(unit="kg/s", start=2)
+      "fluxo mássico de vapor de entrada do dessuperaquecedor";
+      output Real m_tur(unit="kg/s")
+      "fluxo mássico de vapor de entrada do dessuperaquecedor";
+  
+      input Real q_sv(unit="kW", start=300)
+      "fluxo de energia do vapor de entrada do dessuperaquecedor";
+      input Real q_spray(unit="kW", start=100)
+      "fluxo de energia da água de entrada do dessuperaquecedor";
+      output Real q_tur(unit="kW")
+      "fluxo de energia do vapor de saída do dessuperaquecedor";
+  
+      Real cp_tur(unit="kJ/(kg.degC)")
+      "calor específico do vapor de saída do dessuperaquecedor";
+      Real h_tur(unit="kJ/kg")
+      "entalpia do vapor de saída do dessuperaquecedor";
+  
+      Real T_tur(unit="K", displayUnit="degC")
+      "temperatura do vapor de saída do dessuperaquecedor";
+  
+  equation
+      m_tur - m_spray - m_sv = 0;
+      q_tur - q_sv - q_spray = 0;
+      
+      cp_tur = calor_especifico_agua(T_tur);
+      q_tur = m_tur*h_tur;
+      h_tur = cp_tur*T_tur - cp_ref*to_kelvin(T_ref);
+  
+  end Dessuperaquecedor;
 
     model Tambor
         Real p(unit="bar", start=27)
@@ -598,10 +582,13 @@ model Completo
     Evaporador evaporador;
     SuperAquecedorGases superaquecedor_gases;
     SuperAquecedorVapor superaquecedor_vapor;
+    PassagemTubos passagem_tubos;
+    EconomizadorGases economizador_gases;
+    EconomizadorAgua economizador_agua;
     PreAquecedorGases preaquecedor_gases;
     PreAquecedorAr preaquecedor_ar;
-    EconomizadorAgua economizador_agua;
-    EconomizadorGases economizador_gases;
+    Dessuperaquecedor dessuperaquecedor;
+    Tambor tambor;
 equation
     fornalha.T_ar_out = preaquecedor_ar.T_ar_out;
 
