@@ -18,12 +18,12 @@ model Completo
         c := 1.0356 - 0.00022*T + 4.1E-7*T^2;
     end calor_especifico_ar;
 
-    function calor_especifico_vapor
+    function calor_especifico_agua
         input Real T(unit="degC") "Temperatura";
         output Real c(unit="kJ/(kg.degC)") "Calor específico";
     algorithm
         c := 4.18;
-    end calor_especifico_vapor;
+    end calor_especifico_agua;
 
     function to_celsius
         input Real Tkelvin(unit="K") "Temperatura em Kelvin";
@@ -229,8 +229,8 @@ model Completo
         m_v1 - m_sv = 0;
         q_v1 - q_sv + q_conv_s_v1 = 0;
 
-        cp_v1 = calor_especifico_vapor(T_v1);
-        cp_sv = calor_especifico_vapor(T_sv);
+        cp_v1 = calor_especifico_agua(T_v1);
+        cp_sv = calor_especifico_agua(T_sv);
 
         h_v1 = cp_v1*T_v1 - cp_ref*to_kelvin(T_ref);
         q_v1 = m_v1*h_v1;
@@ -302,13 +302,13 @@ model Completo
         Real cp_ec(unit="kJ/(kg.degC)")
         "calor específico dos gases de saída do economizador";
 
-        input Real T_1(unit="K", displayUnit="degC")
+        input Real T_1(unit="K", displayUnit="degC", start=800)
         "temperatura dos gases de entrada do economizador";
         Real T_ec(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do economizador";
-        output Real T_agua(unit="K", displayUnit="degC")
+        input Real T_agua(unit="K", displayUnit="degC", start=400)
         "temperatura da água de entrada do economizador";
-        input Real T_f(unit="K", displayUnit="degC")
+        input Real T_f(unit="K", displayUnit="degC", start=450)
         "temperatura da água de saída do economizador";
         Real T_ec_med(unit="K", displayUnit="degC")
         "temperatura dos gases média do economizador";
@@ -330,42 +330,37 @@ model Completo
     end EconomizadorGases;
     
     model EconomizadorAgua
-        input Real m_agua(unit="kg/s")
+        input Real m_agua(unit="kg/s", start=1.927)
         "fluxo mássico de água de entrada do economizador";
         output Real m_f(unit="kg/s")
         "fluxo mássico de água de saída do economizador";
 
-        input Real q_agua(unit="kW")
+        input Real q_agua(unit="kW", start=100)
         "fluxo de energia da água de entrada do economizador";
         output Real q_f(unit="kW")
         "fluxo de energia de saída do economizador";
-        input Real q_rad_ec(unit="kW")
+        input Real q_rad_ec(unit="kW", start=100)
         "fluxo de calor por radiação do economizador";
-        input Real q_conv_ec(unit="kW")
+        input Real q_conv_ec(unit="kW", start=100)
         "fluxo de calor por convecção do economizador";
         output Real q_conv_ec_f(unit="kW")
         "fluxo de calor por convecção para a água do economizador";
-
-        Real cp_agua(unit="kJ/(kg.degC)")
-        "calor específico da água de entrada do economizador";
+    
         Real cp_f(unit="kJ/(kg.degC)")
         "calor específico da água de saída do economizador";
-        Real h_agua(unit="kJ/kg")
-        "entalpia da água de entrada do economizador";
         Real h_f(unit="kJ/kg")
         "entalpia da água de saída do economizador";
 
-        input Real T_agua(unit="K", displayUnit="degC")
+        input Real T_agua(unit="K", displayUnit="degC", start=105+273)
         "temperatura da água de entrada do economizador";
         output Real T_f(unit="K", displayUnit="degC")
         "temperatura da água de saída do economizador";
 
     equation
+        m_f = m_agua;
         q_agua - q_f + q_conv_ec_f = 0;
-
-        cp_agua = calor_especifico_agua(to_celsius(T_agua));
-        q_agua = m_agua*h_agua;
-        h_agua = cp_agua*T_agua - cp_ref*T_ref;
+    
+        cp_f = calor_especifico_agua(to_celsius(T_f));
 
         q_conv_ec_f = q_rad_ec + q_conv_ec;
 
@@ -376,19 +371,15 @@ model Completo
     model PreAquecedorGases
         input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
-        input Real q_ec(unit="kW")
+        input Real q_ec(unit="kW", start=100)
         "fluxo de energia da água de entrada do pré-aquecedor";
         output Real q_pre(unit="kW")
         "fluxo de energia de saída do pré-aquecedor";
         Real q_conv_pre(unit="kW")
         "fluxo de calor por convecção do pré-aquecedor";
-
-        Real cp_ec(unit="kJ/(kg.degC)")
-        "calor específico dos gases de entrada do pré-aquecedor";
+    
         Real cp_pre(unit="kJ/(kg.degC)")
         "calor específico dos gases de saída do pré-aquecedor";
-        Real h_ec(unit="kJ/kg")
-        "entalpia dos gases de entrada do pré-aquecedor";
         Real h_pre(unit="kJ/kg")
         "entalpia da água de saída do pré-aquecedor";
 
@@ -396,7 +387,7 @@ model Completo
         "temperatura dos gases de entrada do pré-aquecedor";
         Real T_ar(unit="K", displayUnit="degC")
         "temperatura do ar de saída do pré-aquecedor";
-        Real T_pre(unit="K", displayUnit="degC")
+        output Real T_pre(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do pré-aquecedor";
         Real T_pre_med(unit="K", displayUnit="degC")
         "temperatura dos gases média do pré-aquecedor";
@@ -405,12 +396,8 @@ model Completo
 
     equation
         q_ec - q_pre - q_conv_pre = 0;
-
-        cp_ec = calor_especifico_gas(to_celsius(T_ec));
+    
         cp_pre = calor_especifico_gas(to_celsius(T_pre));
-
-        h_ec = cp_ec*T_ec - cp_ref*T_ref;
-        q_ec = m_g*h_ec;
 
         h_pre = cp_pre*T_pre - cp_ref*T_ref;
         q_pre = m_g*h_pre;
@@ -422,38 +409,30 @@ model Completo
     end PreAquecedorGases;
 
     model PreAquecedorAr
-        input Real q_ar_in(unit="kW")
+        input Real q_ar_in(unit="kW", start=100)
         "fluxo de energia do ar de entrada do pré-aquecedor";
-        output Real q_ar_out(unit="kW")
+        output Real q_ar_out(unit="kW", start=200)
         "fluxo de energia do ar de saída do pré-aquecedor";
 
-        input Real q_conv_pre(unit="kW")
+        input Real q_conv_pre(unit="kW", start=200)
         "fluxo de calor por convecção do pré-aquecedor";
         output Real q_conv_pre_ar(unit="kW")
         "fluxo de calor por convecção para o ar do pré-aquecedor";
-
-        Real cp_ar_in(unit="kJ/(kg.degC)")
-        "calor específico do ar de entrada do pré-aquecedor";
+    
         Real cp_ar_out(unit="kJ/(kg.degC)")
         "calor específico do ar de saída do pré-aquecedor";
-        Real h_ar_in(unit="kJ/kg")
-        "entalpia do ar na temperatura ambiente";
         Real h_ar_out(unit="kJ/kg")
         "entalpia do ar de saída do pré-aquecedor";
 
-        input Real T_ar_in(unit="K", displayUnit="degC")
+        input Real T_ar_in(unit="K", displayUnit="degC", start=100)
         "temperatura do ar de entrada do pré-aquecedor";
         output Real T_ar_out(unit="K", displayUnit="degC")
         "temperatura do ar de saída do pré-aquecedor";
 
     equation
         q_ar_in - q_ar_out + q_conv_pre_ar = 0;
-
-        cp_ar_in = calor_especifico_ar(to_celsius(T_ar_in));
+    
         cp_ar_out = calor_especifico_ar(to_celsius(T_ar_out));
-
-        h_ar_in = cp_ar_in*T_ar_in - cp_ref*T_ref;
-        q_ar_in = m_ar*h_ar_in;
 
         q_conv_pre_ar = q_conv_pre;
 
@@ -499,13 +478,13 @@ model Completo
 
         cp_tur = cp_sv;
         cp_sv = cp_spray;
-        cp_spray = 4.17;
+        cp_spray = calor_especifico_agua(T_spray);
         q_tur = m_tur*h_tur;
         h_tur = cp_tur*T_tur - cp_ref*to_kelvin(T_ref);
         q_sv = m_sv*h_sv;
         h_sv = cp_sv*T_sv - cp_ref*to_kelvin(T_ref);
         q_spray = m_spray*h_spray;
-        h_spray = cp_sptray*T_sptray - cp_ref*to_kelvin(T_ref);
+        h_spray = cp_spray*T_spray - cp_ref*to_kelvin(T_ref);
 
     end Dessuperaquecedor;
 
@@ -621,6 +600,8 @@ model Completo
     SuperAquecedorVapor superaquecedor_vapor;
     PreAquecedorGases preaquecedor_gases;
     PreAquecedorAr preaquecedor_ar;
+    EconomizadorAgua economizador_agua;
+    EconomizadorGases economizador_gases;
 equation
     fornalha.T_ar_out = preaquecedor_ar.T_ar_out;
 
@@ -630,5 +611,12 @@ equation
 
     superaquecedor_gases.m_g = evaporador.m_g; 
     superaquecedor_gases.T_ev = evaporador.T_ev; 
-    superaquecedor_gases.q_ev = evaporador.q_ev; 
+    superaquecedor_gases.q_ev = evaporador.q_ev;
+    
+    economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
+   
+annotation(
+    Diagram(coordinateSystem(extent = {{-20, 20}, {20, -20}})),
+    version = "",
+    uses);
 end Completo;
