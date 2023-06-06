@@ -375,7 +375,7 @@ model Completo
         "fluxo de energia da água de entrada do pré-aquecedor";
         output Real q_pre(unit="kW")
         "fluxo de energia de saída do pré-aquecedor";
-        Real q_conv_pre(unit="kW")
+        output Real q_conv_pre(unit="kW")
         "fluxo de calor por convecção do pré-aquecedor";
     
         Real cp_pre(unit="kJ/(kg.degC)")
@@ -383,9 +383,9 @@ model Completo
         Real h_pre(unit="kJ/kg")
         "entalpia da água de saída do pré-aquecedor";
 
-        input Real T_ec(unit="K", displayUnit="degC")
+        input Real T_ec(unit="K", displayUnit="degC", start=300)
         "temperatura dos gases de entrada do pré-aquecedor";
-        Real T_ar(unit="K", displayUnit="degC")
+        input Real T_ar(unit="K", displayUnit="degC", start=100)
         "temperatura do ar de saída do pré-aquecedor";
         output Real T_pre(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do pré-aquecedor";
