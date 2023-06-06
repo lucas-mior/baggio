@@ -591,19 +591,53 @@ model Completo
     Tambor tambor;
 equation
     fornalha.T_ar_out = preaquecedor_ar.T_ar_out;
+    fornalha.q_ar_out = preaquecedor_ar.q_ar_out;
 
+    = fornalha.q_fuel;
     evaporador.m_g = fornalha.m_g;
     evaporador.T_g = fornalha.T_g;
     evaporador.q_g = fornalha.q_g;
 
-    superaquecedor_gases.m_g = evaporador.m_g; 
+    = evaporador.q_ev;
+    = evaporador.T_ev;
+    = evaporador.T_ev_med
+
+    superaquecedor_gases.m_g = fornalha.m_g; 
     superaquecedor_gases.T_ev = evaporador.T_ev; 
     superaquecedor_gases.q_ev = evaporador.q_ev;
+    superaquecedor_gases.T_sv = superaquecedor_vapor.T_sv;
+
+    superaquecedor_vapor.T_sv =
+
+    passagem_tubos.m_g = fornalha.m_g;
+    passagem_tubos.T_s =
+    passagem_tubos.q_s =
+    = passagem_tubos.q_1;
+    = passagem_tubos.T_1;
+
+    economizador_gases.m_g = fornalha.mg
+    economizador_gases.q_1 =
+    economizador_gases.T_1 =
+    economizador_gases.T_agua 
+    economizador_gases.T_f =
+
+    = economizador_gases.q_rad_ec;
+    = economizador_gases.q_conv_ec;
+    = economizador_gases.q_ec;
+
+    economizador_agua.m_agua =
+    economizador_agua.q_agua =
+    economizador_agua.T_agua =
+    economizador_agua.q_rad_ec =
+    economizador_agua.q_conv_ec =
+
+    = economizador_agua.q_conv_ec_f;
+    = economizador_gases.m_f;
+    = economizador_gases.q_conv_ec;
+    = economizador_gases.q_ec;
+
+    preaquecedor_gases.T_ar = preaquecedor_ar.T_ar_out;
     
     economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
    
-annotation(
-    Diagram(coordinateSystem(extent = {{-20, 20}, {20, -20}})),
-    version = "",
-    uses);
 end Completo;
