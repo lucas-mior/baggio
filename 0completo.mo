@@ -124,7 +124,7 @@ model Completo
         "temperatura média dos tubos de metal do evaporador";
         output Real T_ev(unit="K", displayUnit="degC", start=500)
         "temperatura de saída dos gases do evaporador";
-        output Real T_ev_med(unit="K", displayUnit="degC")
+        Real T_ev_med(unit="K", displayUnit="degC")
         "temperatura média dos gases do evaporador";
 
     equation
@@ -596,10 +596,6 @@ equation
     evaporador.q_g = fornalha.q_g;
     evaporador.m_g = fornalha.m_g;
     evaporador.T_g = fornalha.T_g;
-
-    = evaporador.q_ev;
-    = evaporador.T_ev;
-    = evaporador.T_ev_med
 
     superaquecedor_gases.m_g = fornalha.m_g; 
     superaquecedor_gases.T_ev = evaporador.T_ev; 
