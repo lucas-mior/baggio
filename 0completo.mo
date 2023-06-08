@@ -605,8 +605,8 @@ equation
     superaquecedor_gases.T_sv = superaquecedor_vapor.T_sv;
 
     passagem_tubos.m_g = fornalha.m_g;
-    passagem_tubos.T_s = superaquecedor.T_s;
-    passagem_tubos.q_s = superaquecedor.q_s;
+    passagem_tubos.T_s = superaquecedor_gases.T_s;
+    passagem_tubos.q_s = superaquecedor_gases.q_s;
     
     economizador_gases.m_g = fornalha.m_g;
     economizador_gases.q_1 = passagem_tubos.q_1;
