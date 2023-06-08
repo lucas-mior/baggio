@@ -602,7 +602,7 @@ equation
     superaquecedor_gases.q_ev = evaporador.q_ev;
     superaquecedor_gases.T_sv = superaquecedor_vapor.T_sv;
 
-    superaquecedor_vapor.T_sv =
+    superaquecedor_vapor.q_v1 =
 
     passagem_tubos.m_g = fornalha.m_g;
     passagem_tubos.T_s =
