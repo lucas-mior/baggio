@@ -52,7 +52,7 @@ model Completo
         Real T_metal(unit="K", displayUnit="degC")
         "temperatura média dos tubos de metal da fornalha";
 
-        output Real q_fuel(unit="kW")
+        Real q_fuel(unit="kW")
         "fluxo de energia do combustível";
         Real q_rad_f(unit="kW")
         "fluxo de calor por radiação da fornalha";
@@ -593,10 +593,9 @@ equation
     fornalha.T_ar_out = preaquecedor_ar.T_ar_out;
     fornalha.q_ar_out = preaquecedor_ar.q_ar_out;
 
-    = fornalha.q_fuel;
+    evaporador.q_g = fornalha.q_g;
     evaporador.m_g = fornalha.m_g;
     evaporador.T_g = fornalha.T_g;
-    evaporador.q_g = fornalha.q_g;
 
     = evaporador.q_ev;
     = evaporador.T_ev;
