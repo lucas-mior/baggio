@@ -604,14 +604,10 @@ equation
     superaquecedor_gases.q_ev = evaporador.q_ev;
     superaquecedor_gases.T_sv = superaquecedor_vapor.T_sv;
 
-    superaquecedor_vapor.q_v1 =
-
     passagem_tubos.m_g = fornalha.m_g;
     passagem_tubos.T_s = superaquecedor.T_s;
     passagem_tubos.q_s = superaquecedor.q_s;
     
-    
-
     economizador_gases.m_g = fornalha.m_g;
     economizador_gases.q_1 = passagem_tubos.q_1;
     economizador_gases.T_1 = passagem_tubos.T_1;
@@ -620,16 +616,8 @@ equation
 
     economizador_agua.q_rad_ec = economizador_gases.q_rad_ec;
     economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
-    = economizador_gases.q_ec;
 
-    economizador_agua.m_agua =
-    economizador_agua.q_agua =
     economizador_agua.T_agua = t_agua;
-
-    = economizador_agua.q_conv_ec_f;
-    = economizador_gases.m_f;
-    = economizador_gases.q_conv_ec;
-    = economizador_gases.q_ec;
 
     preaquecedor_gases.T_ar = preaquecedor_ar.T_ar_out;
     
