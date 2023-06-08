@@ -63,8 +63,6 @@ model Completo
         "calor específico dos gases de saída da fornalha";
         Real cp_ad(unit="kJ/(kg.degC)")
         "calor específico dos gases para temperatura adiabática";
-        Real cp_ar_out(unit="kJ/(kg.degC)")
-        "calor específico do ar pré-aquecido";
         Real h_g(unit="kJ/kg")
         "entalpia dos gases de saída da fornalha";
 
@@ -80,7 +78,6 @@ model Completo
         
         q_fuel = m_fuel*PCI;
 
-        cp_ar_out = calor_especifico_ar(T_ar_out);
         cp_g = calor_especifico_gas(to_celsius(T_g));
         cp_ad = calor_especifico_gas(to_celsius(T_ad));
 
@@ -102,7 +99,9 @@ model Completo
         "temperatura dos gases de entrada do evaporador";
         input Real q_g(unit="kW", start=1000)
         "fluxo de energia dos gases de entrada do evaporador";
-
+        
+    output Real T_ev(unit="K", displayUnit="degC", start=500)
+        "temperatura de saída dos gases do evaporador";
         output Real q_ev(unit="kW")
         "fluxo de energia de saída do evaporador";
 
@@ -113,26 +112,18 @@ model Completo
 
         Real cp_ev(unit="kJ/(kg.degC)")
         "calor específico dos gases de saída do evaporador";
-        Real cp_g(unit="kJ/(kg.degC)")
-        "output calor específico dos gases de saída da fornalha";
         Real h_ev(unit="kJ/kg")
         "entalpia dos gases de saída do evaporador";
-        Real h_g(unit="kJ/kg")
-        "entalpia dos gases de saída da fornalha";
-
+        
         Real T_metal(unit="K", displayUnit="degC")
         "temperatura média dos tubos de metal do evaporador";
-        output Real T_ev(unit="K", displayUnit="degC", start=500)
-        "temperatura de saída dos gases do evaporador";
         Real T_ev_med(unit="K", displayUnit="degC")
         "temperatura média dos gases do evaporador";
 
     equation
         q_g - q_ev - q_rad_ev - q_conv_ev = 0;
-
-        cp_g = calor_especifico_gas(to_celsius(T_g));
+    
         cp_ev = calor_especifico_gas(to_celsius(T_ev));
-        h_g = cp_g*T_g - cp_ref*to_kelvin(T_ref);
         
         T_metal = to_kelvin(T_sat);
         q_rad_ev = alpha_rad_ev * (to_celsius(T_ev_med)^4 - T_metal^4);
@@ -618,7 +609,7 @@ equation
     economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
 
     economizador_agua.T_agua = t_agua;
-    dessuperaquecedor.q_sv = 200;
+    dessuperaquecedor.q_sv = superaquecedor_vapor.q_sv;
     preaquecedor_gases.T_ar = preaquecedor_ar.T_ar_out;
     preaquecedor_ar.q_conv_pre = 200;
     
