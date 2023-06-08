@@ -552,6 +552,8 @@ model Completo
     "temperatura ambiente";
     constant Real T_sat(unit="degC") = 228
     "temperatura de saturação da água/vapor em regime permanente";
+    constant Real t_agua(unit="degC") = 105
+    "temperatura da água de alimentação";
     constant Real h_f(unit="kJ/kg") = 441.841
     "entalpia da água de alimentação";
 
@@ -605,26 +607,24 @@ equation
     superaquecedor_vapor.q_v1 =
 
     passagem_tubos.m_g = fornalha.m_g;
-    passagem_tubos.T_s =
-    passagem_tubos.q_s =
-    = passagem_tubos.q_1;
-    = passagem_tubos.T_1;
+    passagem_tubos.T_s = superaquecedor.T_s;
+    passagem_tubos.q_s = superaquecedor.q_s;
+    
+    
 
-    economizador_gases.m_g = fornalha.mg
-    economizador_gases.q_1 =
-    economizador_gases.T_1 =
-    economizador_gases.T_agua 
-    economizador_gases.T_f =
+    economizador_gases.m_g = fornalha.m_g;
+    economizador_gases.q_1 = passagem_tubos.q_1;
+    economizador_gases.T_1 = passagem_tubos.T_1;
+    economizador_gases.T_agua = t_agua;
+    economizador_gases.T_f = economizador_agua.T_f;
 
-    = economizador_gases.q_rad_ec;
-    = economizador_gases.q_conv_ec;
+    economizador_agua.q_rad_ec = economizador_gases.q_rad_ec;
+    economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
     = economizador_gases.q_ec;
 
     economizador_agua.m_agua =
     economizador_agua.q_agua =
-    economizador_agua.T_agua =
-    economizador_agua.q_rad_ec =
-    economizador_agua.q_conv_ec =
+    economizador_agua.T_agua = t_agua;
 
     = economizador_agua.q_conv_ec_f;
     = economizador_gases.m_f;
@@ -633,6 +633,4 @@ equation
 
     preaquecedor_gases.T_ar = preaquecedor_ar.T_ar_out;
     
-    economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
-   
 end Completo;
