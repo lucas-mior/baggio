@@ -618,7 +618,8 @@ equation
     economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
 
     economizador_agua.T_agua = t_agua;
-
+    dessuperaquecedor.q_sv = 200;
     preaquecedor_gases.T_ar = preaquecedor_ar.T_ar_out;
+    preaquecedor_ar.q_conv_pre = 200;
     
 end Completo;
