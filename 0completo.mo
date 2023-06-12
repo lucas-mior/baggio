@@ -82,8 +82,9 @@ model Completo
         cp_ad = calor_especifico_gas(to_celsius(T_ad));
 
         T_metal = to_kelvin(T_sat);
-        q_rad_f = alpha_rad_f*(to_celsius(T_for)^4 - T_metal^4);
-        q_conv_f = alpha_conv_f*(to_celsius(T_for) - T_metal);
+
+        q_rad_f = alpha_rad_f*(to_celsius(T_for)^4 - to_celsius(T_metal)^4);
+        q_conv_f = alpha_conv_f*(to_celsius(T_for) - to_celsius(T_metal));
 
         h_g = cp_g*T_g - cp_ref*(to_kelvin(T_ref));
         q_g = m_g*h_g;
@@ -100,7 +101,7 @@ model Completo
         input Real q_g(unit="kW", start=1000)
         "fluxo de energia dos gases de entrada do evaporador";
         
-    output Real T_ev(unit="K", displayUnit="degC", start=500)
+        output Real T_ev(unit="K", displayUnit="degC", start=500)
         "temperatura de saída dos gases do evaporador";
         output Real q_ev(unit="kW")
         "fluxo de energia de saída do evaporador";
@@ -126,8 +127,8 @@ model Completo
         cp_ev = calor_especifico_gas(to_celsius(T_ev));
         
         T_metal = to_kelvin(T_sat);
-        q_rad_ev = alpha_rad_ev * (to_celsius(T_ev_med)^4 - T_metal^4);
-        q_conv_ev = alpha_conv_ev * (to_celsius(T_ev_med) - T_metal);
+        q_rad_ev = alpha_rad_ev * (to_celsius(T_ev_med)^4 - to_celsius(T_metal)^4);
+        q_conv_ev = alpha_conv_ev * (to_celsius(T_ev_med) - to_celsius(T_metal));
         
         h_ev = cp_ev*T_ev - cp_ref*(to_kelvin(T_ref)); 
         q_ev = (m_g*h_ev);
@@ -160,7 +161,7 @@ model Completo
         Real h_s(unit="kJ/kg")
         "entalpia dos gases de saída do superaquecedor";
 
-        input Real T_sv(unit="K", displayUnit="degC", start=100)
+        input Real T_sv(unit="K", displayUnit="degC", start=100+273)
         "temperatura do vapor de saída do superaquecedor";
         Real T_metal_s(unit="K", displayUnit="degC")
         "temperatura dos tubos de metal média do superaquecedor";
@@ -172,8 +173,8 @@ model Completo
 
         cp_s = calor_especifico_gas(to_celsius(T_s));
 
-        q_rad_s = alpha_rad_s*(to_celsius(T_s_med)^4 - T_metal_s^4);
-        q_conv_s = alpha_rad_s*(to_celsius(T_s_med) - T_metal_s);
+        q_rad_s = alpha_rad_s*(to_celsius(T_s_med)^4 - to_celsius(T_metal_s)^4);
+        q_conv_s = alpha_rad_s*(to_celsius(T_s_med) - to_celsius(T_metal_s));
 
         h_s = cp_s*T_s - cp_ref*to_kelvin(T_ref);
         q_s = m_g*h_s;
@@ -184,8 +185,6 @@ model Completo
     end SuperAquecedorGases;
 
     model SuperAquecedorVapor
-        // input Real m_v1(unit="kg/s", start=3)
-        // "fluxo mássico de vapor de entrada do superaquecedor";
         output Real m_sv(unit="kg/s")
         "fluxo mássico de vapor de saída do superaquecedor";
 
@@ -261,7 +260,7 @@ model Completo
         "temperatura dos tubos de metal média da passagem de tubos";
 
     equation
-        T_metal = T_sat;
+        T_metal = to_kelvin(T_sat);
         q_s - q_1 - q_rad_1 - q_conv_1 = 0;
 
         cp_1 = calor_especifico_gas(to_celsius(T_1));
