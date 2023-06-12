@@ -324,8 +324,8 @@ model Completo
         "fluxo mássico de água de entrada do economizador";
         output Real m_f(unit="kg/s")
         "fluxo mássico de água de saída do economizador";
-
-        input Real q_agua(unit="kW", start=100)
+    
+        Real q_agua(unit="kW", start=100)
         "fluxo de energia da água de entrada do economizador";
         output Real q_f(unit="kW")
         "fluxo de energia de saída do economizador";
@@ -340,20 +340,28 @@ model Completo
         "calor específico da água de saída do economizador";
         Real h_f(unit="kJ/kg")
         "entalpia da água de saída do economizador";
-
+        Real cp_agua(unit="kJ/(kg.degC)")
+        "calor específico da água de entrada do economizador";
+        Real h_agua(unit="kJ/kg")
+        "entalpia da água de entrada do economizador";
+    
         input Real T_agua(unit="K", displayUnit="degC", start=100+273)
         "temperatura da água de entrada do economizador";
         output Real T_f(unit="K", displayUnit="degC")
         "temperatura da água de saída do economizador";
-
+    
     equation
         m_f - m_agua = 0;
         q_agua - q_f + q_conv_ec_f = 0;
+        
+        cp_agua = calor_especifico_agua(to_celsius(T_agua));
+        h_agua = cp_agua*T_agua - cp_ref*to_kelvin(T_ref);
+        q_agua = m_agua*h_agua;
     
         cp_f = calor_especifico_agua(to_celsius(T_f));
-
+    
         q_conv_ec_f = q_rad_ec + q_conv_ec;
-
+    
         h_f = cp_f*T_f - cp_ref*to_kelvin(T_ref);
         q_f = m_f*h_f;
     end EconomizadorAgua;
