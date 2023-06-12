@@ -347,7 +347,7 @@ model Completo
         "temperatura da água de saída do economizador";
 
     equation
-        m_agua = m_f;
+        m_f - m_agua = 0;
         q_agua - q_f + q_conv_ec_f = 0;
     
         cp_f = calor_especifico_agua(to_celsius(T_f));
@@ -420,6 +420,7 @@ model Completo
         "temperatura do ar de saída do pré-aquecedor";
 
     equation
+        T_ar_in = to_kelvin(T_ref);
         q_ar_in - q_ar_out + q_conv_pre_ar = 0;
     
         cp_ar_out = calor_especifico_ar(to_celsius(T_ar_out));
@@ -435,7 +436,7 @@ model Completo
       input Real m_sv(unit="kg/s", start=2)
       "fluxo mássico de vapor de entrada do dessuperaquecedor";
       output Real m_tur(unit="kg/s")
-      "fluxo mássico de vapor de entrada do dessuperaquecedor";
+      "fluxo mássico de vapor de saída do dessuperaquecedor";
   
       input Real q_sv(unit="kW", start=300)
       "fluxo de energia do vapor de entrada do dessuperaquecedor";
@@ -483,7 +484,7 @@ model Completo
         Real Q(unit="kW")
         "fluxo de calor";
 
-        Real m_f(unit="kg/s")
+        input Real m_f(unit="kg/s")
         "fluxo mássico de água de entrada do tubulão";
         input Real m_v1(unit="kg/s", start=1.927)
         "fluxo mássico de água de saída do tubulão";
@@ -527,7 +528,7 @@ model Completo
     constant Real m_fuel(unit="kg/s") = 0.7942
     "fluxo mássico de combustível";
     constant Real m_ar(unit="kg/s") = 3.7008
-    "fluxo mássico de ar pré-aquecido";
+    "fluxo mássico de ar";
     constant Real m_v1(unit="kg/s") = 1.927
     "fluxo mássico de vapor";
     constant Real m_tur(unit="kg/s") = 2.0833
@@ -594,6 +595,9 @@ equation
     superaquecedor_gases.q_ev = evaporador.q_ev;
     superaquecedor_gases.T_sv = superaquecedor_vapor.T_sv;
 
+    superaquecedor_vapor.q_rad_s = superaquecedor_gases.q_rad_s;
+    superaquecedor_vapor.q_conv_s = superaquecedor_gases.q_conv_s;
+
     passagem_tubos.m_g = fornalha.m_g;
     passagem_tubos.T_s = superaquecedor_gases.T_s;
     passagem_tubos.q_s = superaquecedor_gases.q_s;
@@ -606,10 +610,16 @@ equation
 
     economizador_agua.q_rad_ec = economizador_gases.q_rad_ec;
     economizador_agua.q_conv_ec = economizador_gases.q_conv_ec;
-
     economizador_agua.T_agua = t_agua;
+
+    tambor.m_f = economizador_agua.m_f;
+
+    dessuperaquecedor.m_sv = m_v1;
     dessuperaquecedor.q_sv = superaquecedor_vapor.q_sv;
+
+    preaquecedor_gases.m_g = fornalha.m_g;
     preaquecedor_gases.T_ar = preaquecedor_ar.T_ar_out;
+    preaquecedor_gases.T_ec = economizador_gases.T_ec;
     preaquecedor_ar.q_conv_pre = 200;
     
 end Completo;
