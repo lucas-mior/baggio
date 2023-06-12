@@ -448,7 +448,7 @@ model Completo
   
       input Real q_sv(unit="kW", start=300)
       "fluxo de energia do vapor de entrada do dessuperaquecedor";
-      input Real q_spray(unit="kW", start=100)
+      Real q_spray(unit="kW", start=100)
       "fluxo de energia da água de entrada do dessuperaquecedor";
       output Real q_tur(unit="kW")
       "fluxo de energia do vapor de saída do dessuperaquecedor";
@@ -457,15 +457,25 @@ model Completo
       "calor específico do vapor de saída do dessuperaquecedor";
       Real h_tur(unit="kJ/kg")
       "entalpia do vapor de saída do dessuperaquecedor";
+      Real cp_spray(unit="kJ/(kg.degC)")
+      "calor específico do spray do dessuperaquecedor";
+      Real h_spray(unit="kJ/kg")
+      "entalpia do spray do dessuperaquecedor";
   
       Real T_tur(unit="K", displayUnit="degC")
       "temperatura do vapor de saída do dessuperaquecedor";
+      Real T_spray(unit="K", displayUnit="degC")
+      "temperatura do spray do dessuperaquecedor";
   
   equation
       m_tur - m_spray - m_sv = 0;
       q_tur - q_sv - q_spray = 0;
       
-      cp_tur = calor_especifico_agua(T_tur);
+      cp_spray = calor_especifico_agua(T_spray);
+      h_spray = cp_spray*T_spray - cp_ref*to_kelvin(T_ref);
+      q_spray = m_spray*h_spray;
+
+      cp_tur = calor_especifico_agua(to_celsius(T_tur));
       q_tur = m_tur*h_tur;
       h_tur = cp_tur*T_tur - cp_ref*to_kelvin(T_ref);
   
