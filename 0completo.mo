@@ -296,7 +296,7 @@ model Completo
         "temperatura dos gases de entrada do economizador";
         Real T_ec(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do economizador";
-        input Real T_agua(unit="K", displayUnit="degC", start=400)
+        input Real T_agua(unit="K", displayUnit="degC", start=100+273)
         "temperatura da água de entrada do economizador";
         input Real T_f(unit="K", displayUnit="degC", start=450)
         "temperatura da água de saída do economizador";
@@ -309,13 +309,13 @@ model Completo
         q_1 - q_ec - q_rad_ec - q_conv_ec = 0;
 
         cp_ec = calor_especifico_gas(to_celsius(T_ec));
-        q_rad_ec = alpha_rad_ec*(to_celsius(T_1)^4 - to_celsius(T_metal_ec)^4);
-        q_conv_ec = alpha_conv_ec*(to_celsius(T_1) - to_celsius(T_metal_ec));
+        q_rad_ec = alpha_rad_ec*(to_celsius(T_ec_med)^4 - to_celsius(T_metal_ec)^4);
+        q_conv_ec = alpha_conv_ec*(to_celsius(T_ec_med) - to_celsius(T_metal_ec));
 
         h_ec = cp_ec*T_ec - cp_ref*to_kelvin(T_ref);
         q_ec = m_g*h_ec;
-        T_ec_med = (T_ec + T_1)/2;
 
+        T_ec_med = (T_ec + T_1)/2;
         T_metal_ec = (T_agua + T_f)/2;
     end EconomizadorGases;
     
@@ -341,27 +341,27 @@ model Completo
         Real h_f(unit="kJ/kg")
         "entalpia da água de saída do economizador";
 
-        input Real T_agua(unit="K", displayUnit="degC", start=105+273)
+        input Real T_agua(unit="K", displayUnit="degC", start=100+273)
         "temperatura da água de entrada do economizador";
         output Real T_f(unit="K", displayUnit="degC")
         "temperatura da água de saída do economizador";
 
     equation
-        m_f = m_agua;
+        m_agua = m_f;
         q_agua - q_f + q_conv_ec_f = 0;
     
         cp_f = calor_especifico_agua(to_celsius(T_f));
 
         q_conv_ec_f = q_rad_ec + q_conv_ec;
 
-        h_f = cp_f*T_f - cp_ref*T_ref;
+        h_f = cp_f*T_f - cp_ref*to_kelvin(T_ref);
         q_f = m_f*h_f;
     end EconomizadorAgua;
 
     model PreAquecedorGases
         input Real m_g(unit="kg/s", start=4.495)
         "fluxo mássico dos gases";
-        input Real q_ec(unit="kW", start=100)
+        input Real q_ec(unit="kW", start=200)
         "fluxo de energia da água de entrada do pré-aquecedor";
         output Real q_pre(unit="kW")
         "fluxo de energia de saída do pré-aquecedor";
@@ -373,9 +373,9 @@ model Completo
         Real h_pre(unit="kJ/kg")
         "entalpia da água de saída do pré-aquecedor";
 
-        input Real T_ec(unit="K", displayUnit="degC", start=300)
+        input Real T_ec(unit="K", displayUnit="degC", start=200+273)
         "temperatura dos gases de entrada do pré-aquecedor";
-        input Real T_ar(unit="K", displayUnit="degC", start=100)
+        input Real T_ar(unit="K", displayUnit="degC", start=200+273)
         "temperatura do ar de saída do pré-aquecedor";
         output Real T_pre(unit="K", displayUnit="degC")
         "temperatura dos gases de saída do pré-aquecedor";
@@ -389,10 +389,10 @@ model Completo
     
         cp_pre = calor_especifico_gas(to_celsius(T_pre));
 
-        h_pre = cp_pre*T_pre - cp_ref*T_ref;
+        h_pre = cp_pre*T_pre - cp_ref*to_kelvin(T_ref);
         q_pre = m_g*h_pre;
 
-        q_conv_pre = alpha_conv_pre*(T_pre_med - T_metal_pre);
+        q_conv_pre = alpha_conv_pre*(to_celsius(T_pre_med) - to_celsius(T_metal_pre));
 
         T_pre_med = (T_ec + T_pre)/2;
         T_metal_pre = (T_ec + T_pre + T_ref + T_ar)/4;
@@ -414,7 +414,7 @@ model Completo
         Real h_ar_out(unit="kJ/kg")
         "entalpia do ar de saída do pré-aquecedor";
 
-        input Real T_ar_in(unit="K", displayUnit="degC", start=100)
+        input Real T_ar_in(unit="K", displayUnit="degC", start=100+273)
         "temperatura do ar de entrada do pré-aquecedor";
         output Real T_ar_out(unit="K", displayUnit="degC")
         "temperatura do ar de saída do pré-aquecedor";
