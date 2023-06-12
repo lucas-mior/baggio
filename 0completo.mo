@@ -426,7 +426,7 @@ model Completo
 
         q_conv_pre_ar = q_conv_pre;
 
-        h_ar_out = cp_ar_out*T_ar_out - cp_ref*T_ref;
+        h_ar_out = cp_ar_out*T_ar_out - cp_ref*to_kelvin(T_ref);
         q_ar_out = m_ar*h_ar_out;
 
     end PreAquecedorAr;
